@@ -1,24 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Job Not Finished
+
+A task management application with GitHub authentication and protected routes.
+
+## Features
+
+- GitHub authentication
+- Protected routes
+- User profile page
+- Dashboard for authenticated users
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ or Bun
+- GitHub account (for OAuth setup)
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
 
 ```bash
-npm run dev
+bun install
 # or
-yarn dev
-# or
-pnpm dev
-# or
+npm install
+```
+
+### Setting up GitHub OAuth
+
+1. Go to your GitHub account settings
+2. Navigate to "Developer settings" > "OAuth Apps" > "New OAuth App"
+3. Fill in the application details:
+   - Application name: Job Not Finished (or your preferred name)
+   - Homepage URL: http://localhost:3000
+   - Authorization callback URL: http://localhost:3000/api/auth/callback/github
+4. Register the application
+5. Copy the Client ID and generate a new Client Secret
+6. Create a `.env.local` file in the root of your project with the following content:
+
+```
+# Auth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-nextauth-secret-key-change-this-in-production
+
+# GitHub OAuth
+GITHUB_CLIENT_ID=your-github-client-id
+GITHUB_CLIENT_SECRET=your-github-client-secret
+```
+
+7. Replace `your-github-client-id` and `your-github-client-secret` with the values from GitHub
+8. Generate a random string for `NEXTAUTH_SECRET` (you can use `openssl rand -base64 32` in your terminal)
+
+### Running the Development Server
+
+```bash
 bun dev
+# or
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Protected Routes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The following routes are protected and require authentication:
+
+- `/dashboard` - Main dashboard for authenticated users
+- `/profile` - User profile page
+
+If you try to access these routes without being authenticated, you will be redirected to the sign-in page.
+
+## Authentication Flow
+
+1. User clicks "Sign In" button on the home page
+2. User is redirected to GitHub for authentication
+3. After successful authentication, user is redirected back to the application
+4. User can now access protected routes
+
+## Technologies Used
+
+- Next.js 15
+- NextAuth.js 5
+- Tailwind CSS
+- TypeScript
 
 ## Learn More
 
