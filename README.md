@@ -34,7 +34,7 @@ A modern web application designed to help developers track and manage their unfi
 
 ## 🚀 Demo
 
-Visit the live demo at [https://job-not-finished.vercel.app](https://job-not-finished.vercel.app) (replace with your actual deployment URL)
+Visit the live demo at [https://job-not-finished.vercel.app/](https://job-not-finished.vercel.app/) (replace with your actual deployment URL)
 
 ## 🏁 Getting Started
 
@@ -215,4 +215,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-<p align="center">Made with ❤️ by Your Name</p>
+<p align="center">Made with ❤️ by Arth</p>

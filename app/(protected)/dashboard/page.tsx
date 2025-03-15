@@ -119,12 +119,7 @@ const DashboardPage = () => {
     },
   };
 
-  // If not mounted yet, return a simple loading state without animations
-  if (!mounted) {
-    return <div className="p-8">Loading...</div>;
-  }
-
-  if (isLoading) {
+  if (isLoading || !mounted) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh]">
         <motion.div
