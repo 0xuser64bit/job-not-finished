@@ -28,8 +28,7 @@ export const {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isProtected =
-        nextUrl.pathname.startsWith("/dashboard") ||
-        nextUrl.pathname.startsWith("/profile");
+        nextUrl.pathname.startsWith("/dashboard");
 
       if (isProtected && !isLoggedIn) {
         const redirectUrl = new URL("/signin", nextUrl.origin);

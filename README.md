@@ -25,7 +25,6 @@ A modern web application designed to help developers track and manage their unfi
 - [Usage](#-usage)
   - [Authentication](#authentication)
   - [Dashboard](#dashboard)
-  - [Profile](#profile)
 - [Project Structure](#-project-structure)
 - [Technologies](#-technologies)
 - [Contributing](#-contributing)
@@ -148,18 +147,13 @@ The dashboard displays all your GitHub repositories with the following features:
 - **Source Filter**: Toggle to show only repositories you created (exclude forks)
 - **Pagination**: Navigate through your repositories with ease
 
-### Profile
-
-The profile page displays your GitHub profile information and account settings.
-
 ## 📂 Project Structure
 
 ```
 job-not-finished/
 ├── app/                      # Next.js App Router
 │   ├── (protected)/          # Protected routes requiring authentication
-│   │   ├── dashboard/        # Dashboard page
-│   │   └── profile/          # User profile page
+│   │   └── dashboard/        # Dashboard page
 │   ├── api/                  # API routes
 │   │   └── auth/             # Authentication API routes
 │   ├── signin/               # Sign-in page

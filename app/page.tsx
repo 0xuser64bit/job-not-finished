@@ -11,16 +11,7 @@ export default async function Home() {
       <header className="w-full flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Job Not Finished</h1>
         <div>
-          {isLoggedIn ? (
-            <div className="flex gap-4">
-              <Link href="/dashboard">
-                <Button variant="outline">Dashboard</Button>
-              </Link>
-              <Link href="/profile">
-                <Button variant="outline">Profile</Button>
-              </Link>
-            </div>
-          ) : (
+          {!isLoggedIn &&(
             <Link href="/signin">
               <Button>Sign In</Button>
             </Link>
@@ -47,9 +38,6 @@ export default async function Home() {
                 <div className="flex gap-4">
                   <Link href="/dashboard">
                     <Button>Go to Dashboard</Button>
-                  </Link>
-                  <Link href="/profile">
-                    <Button variant="outline">View Profile</Button>
                   </Link>
                 </div>
               </div>
