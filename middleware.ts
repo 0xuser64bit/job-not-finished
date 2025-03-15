@@ -9,9 +9,9 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   // Public routes accessible to all users
-  const isPublicRoute = 
-    nextUrl.pathname === "/" || 
-    nextUrl.pathname === "/signin" || 
+  const isPublicRoute =
+    nextUrl.pathname === "/" ||
+    nextUrl.pathname === "/signin" ||
     nextUrl.pathname.startsWith("/api/auth");
 
   // If trying to access a protected route while not logged in
@@ -30,4 +30,4 @@ export default auth((req) => {
 // This ensures the middleware is called for all routes
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
-}; 
+};

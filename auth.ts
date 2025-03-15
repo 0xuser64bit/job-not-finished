@@ -2,11 +2,11 @@ import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import { NextResponse } from "next/server";
 
-export const { 
+export const {
   handlers: { GET, POST },
   auth,
   signIn,
-  signOut
+  signOut,
 } = NextAuth({
   providers: [
     GitHub({
@@ -27,17 +27,17 @@ export const {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isProtected = 
-        nextUrl.pathname.startsWith('/dashboard') || 
-        nextUrl.pathname.startsWith('/profile');
-      
+      const isProtected =
+        nextUrl.pathname.startsWith("/dashboard") ||
+        nextUrl.pathname.startsWith("/profile");
+
       if (isProtected && !isLoggedIn) {
         const redirectUrl = new URL("/signin", nextUrl.origin);
         redirectUrl.searchParams.set("callbackUrl", nextUrl.href);
         return NextResponse.redirect(redirectUrl);
       }
-      
+
       return true;
     },
   },
-}); 
+});

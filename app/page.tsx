@@ -27,19 +27,22 @@ export default async function Home() {
           )}
         </div>
       </header>
-      
+
       <main className="flex flex-col gap-[32px] row-start-2 items-center">
         <div className="text-center max-w-2xl">
-          <h2 className="text-4xl font-bold mb-4">Welcome to Job Not Finished</h2>
+          <h2 className="text-4xl font-bold mb-4">
+            Welcome to Job Not Finished
+          </h2>
           <p className="text-xl text-gray-600 mb-8">
             A task management application with GitHub authentication
           </p>
-          
+
           <div className="mb-8">
             {isLoggedIn && session.user ? (
               <div className="flex flex-col items-center">
                 <p className="text-green-600 font-medium mb-4">
-                  You are signed in as {session.user.name || session.user.email || "User"}
+                  You are signed in as{" "}
+                  {session.user.name || session.user.email || "User"}
                 </p>
                 <div className="flex gap-4">
                   <Link href="/dashboard">

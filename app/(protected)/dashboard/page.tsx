@@ -12,13 +12,7 @@ import {
 import { fetchUserRepositories, Repository } from "@/lib/github";
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Search,
-  Filter,
-  ArrowUpDown,
-  Github,
-  AlertCircle,
-} from "lucide-react";
+import { Search, Filter, ArrowUpDown, Github, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -59,7 +53,7 @@ const DashboardPage = () => {
         setRepositories(repos);
         if (repos.length === 0) {
           setError(
-            "No repositories found. Make sure your GitHub token is set correctly in .env.local"
+            "No repositories found. Make sure your GitHub token is set correctly in .env.local",
           );
         }
       } catch (err) {
@@ -79,7 +73,7 @@ const DashboardPage = () => {
         (languageFilter === "all" || !languageFilter
           ? true
           : repo.language === languageFilter) &&
-        (showSourceOnly ? !repo.fork : true)
+        (showSourceOnly ? !repo.fork : true),
     )
     .sort((a, b) => {
       if (sortOption === "name") return a.name.localeCompare(b.name);
@@ -104,12 +98,12 @@ const DashboardPage = () => {
 
   const paginatedRepos = filteredRepos.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const totalPages = Math.ceil(filteredRepos.length / itemsPerPage) || 1;
   const languages = Array.from(
-    new Set(repositories.map((repo) => repo.language))
+    new Set(repositories.map((repo) => repo.language)),
   )
     .filter(Boolean)
     .sort();
@@ -226,7 +220,13 @@ const DashboardPage = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="inline-flex items-center justify-center"
         >
-          <Image src="/image.png" alt="Logo" width={120} height={120} className="rounded-lg object-cover"/>
+          <Image
+            src="/image.png"
+            alt="Logo"
+            width={120}
+            height={120}
+            className="rounded-lg object-cover"
+          />
         </motion.div>
         <motion.h1
           className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-500"
@@ -369,7 +369,7 @@ const DashboardPage = () => {
                 isForked={repo.fork}
                 lastActivity={Math.floor(
                   (new Date().getTime() - new Date(repo.updated_at).getTime()) /
-                    (1000 * 60 * 60 * 24)
+                    (1000 * 60 * 60 * 24),
                 )}
                 // TODO: Get progress from backend or make it editable
                 progress={Math.floor(Math.random() * 100)}

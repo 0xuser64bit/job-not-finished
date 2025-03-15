@@ -5,7 +5,7 @@ import { GithubIcon } from "lucide-react";
 
 export default async function SignInPage() {
   const session = await auth();
-  
+
   // If the user is already logged in, redirect to the dashboard
   if (session?.user) {
     redirect("/dashboard");
@@ -23,12 +23,15 @@ export default async function SignInPage() {
           </p>
         </div>
         <div className="mt-8 space-y-6">
-          <form className="space-y-6" action={async () => {
-            "use server";
-            await signIn("github", { redirectTo: "/dashboard" });
-          }}>
-            <Button 
-              type="submit" 
+          <form
+            className="space-y-6"
+            action={async () => {
+              "use server";
+              await signIn("github", { redirectTo: "/dashboard" });
+            }}
+          >
+            <Button
+              type="submit"
               className="group relative cursor-pointer flex w-full justify-center rounded-md border border-transparent bg-black py-2 px-4 text-sm font-medium text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
             >
               <GithubIcon className="mr-2 h-4 w-4" />
@@ -39,4 +42,4 @@ export default async function SignInPage() {
       </div>
     </div>
   );
-} 
+}

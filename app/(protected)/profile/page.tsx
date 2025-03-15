@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default async function ProfilePage() {
   const session = await auth();
-  
+
   // If the user is not logged in, redirect to the sign-in page
   if (!session?.user) {
     redirect("/signin");
@@ -16,7 +16,9 @@ export default async function ProfilePage() {
     <div className="min-h-screen bg-gray-50">
       <header className="bg-white shadow">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Profile</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Profile
+          </h1>
         </div>
       </header>
       <main>
@@ -34,25 +36,28 @@ export default async function ProfilePage() {
                     />
                   </div>
                 )}
-                <h2 className="text-2xl font-bold">{session.user.name || "User"}</h2>
+                <h2 className="text-2xl font-bold">
+                  {session.user.name || "User"}
+                </h2>
                 <p className="text-gray-600">{session.user.email}</p>
-                
+
                 <div className="mt-8 p-4 bg-white rounded-lg shadow w-full max-w-md">
                   <h3 className="text-lg font-medium mb-2">User Information</h3>
-                  <p className="text-gray-600 mb-1">This is a protected profile page that only authenticated users can access.</p>
-                  <p className="text-gray-600">You are signed in with GitHub.</p>
+                  <p className="text-gray-600 mb-1">
+                    This is a protected profile page that only authenticated
+                    users can access.
+                  </p>
+                  <p className="text-gray-600">
+                    You are signed in with GitHub.
+                  </p>
                 </div>
-                
+
                 <div className="mt-8 flex gap-4">
                   <Link href="/dashboard">
-                    <Button>
-                      Back to Dashboard
-                    </Button>
+                    <Button>Back to Dashboard</Button>
                   </Link>
                   <Link href="/">
-                    <Button variant="outline">
-                      Home
-                    </Button>
+                    <Button variant="outline">Home</Button>
                   </Link>
                 </div>
               </div>
@@ -62,4 +67,4 @@ export default async function ProfilePage() {
       </main>
     </div>
   );
-} 
+}

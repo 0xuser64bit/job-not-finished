@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 
 interface LoadingAnimationProps {
   size?: number;
   color?: string;
 }
 
-const LoadingAnimation: React.FC<LoadingAnimationProps> = ({ 
-  size = 40, 
-  color = 'currentColor' 
+const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
+  size = 40,
+  color = "currentColor",
 }) => {
   const containerVariants = {
     animate: {
@@ -18,9 +18,9 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
       transition: {
         duration: 2,
         ease: "linear",
-        repeat: Infinity
-      }
-    }
+        repeat: Infinity,
+      },
+    },
   };
 
   return (
@@ -30,7 +30,7 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
       style={{
         width: size,
         height: size,
-        position: 'relative'
+        position: "relative",
       }}
     >
       <svg
@@ -38,17 +38,17 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
         height="100%"
         viewBox="0 0 100 100"
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 0,
           left: 0,
         }}
       >
         {[0, 1, 2, 3, 4, 5].map((i) => {
-          const angle = (i * 60) * (Math.PI / 180);
+          const angle = i * 60 * (Math.PI / 180);
           const x = 50 + 35 * Math.cos(angle);
           const y = 50 + 35 * Math.sin(angle);
           const delay = i * 0.15;
-          
+
           return (
             <motion.circle
               key={i}
@@ -57,15 +57,15 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
               r={size / 10}
               fill={color}
               initial={{ opacity: 0.2 }}
-              animate={{ 
+              animate={{
                 opacity: [0.2, 1, 0.2],
                 transition: {
                   duration: 1.5,
                   ease: "easeInOut",
                   repeat: Infinity,
                   repeatType: "loop",
-                  delay
-                }
+                  delay,
+                },
               }}
             />
           );
@@ -75,4 +75,4 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
   );
 };
 
-export default LoadingAnimation; 
+export default LoadingAnimation;
