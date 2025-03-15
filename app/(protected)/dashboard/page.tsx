@@ -25,6 +25,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import { auth } from "@/auth";
 
 const DashboardPage = () => {
   const [repositories, setRepositories] = useState<Repository[]>([]);
@@ -45,11 +46,25 @@ const DashboardPage = () => {
   }, []);
 
   useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const session = await auth();
+        // Use githubUsername if available, otherwise fall back to name or a default
+        const githubUser = session?.user?.githubUsername || session?.user?.name || "user-64bit";
+        return githubUser;
+      } catch (error) {
+        console.error("Error fetching session:", error);
+        return "user-64bit"; // Default fallback
+      }
+    };
+
     const fetchData = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const repos = await fetchUserRepositories("user-64bit");
+        const githubUsername = await fetchSession();
+        console.log("Fetching repositories for username:", githubUsername);
+        const repos = await fetchUserRepositories(githubUsername);
         setRepositories(repos);
         if (repos.length === 0) {
           setError(

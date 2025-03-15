@@ -25,6 +25,21 @@ export const {
     signIn: "/signin",
   },
   callbacks: {
+    async jwt({ token, account, profile }) {
+      // Persist the GitHub username to the token
+      if (account && account.provider === 'github' && profile) {
+        token.githubUsername = profile.login || '';
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Add the GitHub username to the session
+      if (token && typeof token.githubUsername === 'string') {
+        session.user = session.user || {};
+        session.user.githubUsername = token.githubUsername;
+      }
+      return session;
+    },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isProtected =
