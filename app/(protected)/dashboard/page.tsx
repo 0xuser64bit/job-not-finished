@@ -1,5 +1,5 @@
 "use client";
-import RepositoryCard from '@/components/RepositoryCard';
+import RepositoryCard from "@/components/RepositoryCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -9,10 +9,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { fetchUserRepositories, Repository } from '@/lib/github';
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, ArrowUpDown, Loader2, Github, Coffee, AlertCircle } from 'lucide-react';
+import { fetchUserRepositories, Repository } from "@/lib/github";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search,
+  Filter,
+  ArrowUpDown,
+  Loader2,
+  Github,
+  Coffee,
+  AlertCircle,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -20,19 +28,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import LoadingAnimation from '@/components/ui/loading-animation';
-import { useRouter } from 'next/navigation';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import LoadingAnimation from "@/components/ui/loading-animation";
+import { useRouter } from "next/navigation";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 const DashboardPage = () => {
   const router = useRouter();
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [languageFilter, setLanguageFilter] = useState('all');
-  const [sortOption, setSortOption] = useState('name');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [languageFilter, setLanguageFilter] = useState("all");
+  const [sortOption, setSortOption] = useState("name");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -50,13 +59,15 @@ const DashboardPage = () => {
       try {
         setIsLoading(true);
         setError(null);
-        const repos = await fetchUserRepositories('user-64bit');
+        const repos = await fetchUserRepositories("user-64bit");
         setRepositories(repos);
         if (repos.length === 0) {
-          setError('No repositories found. Make sure your GitHub token is set correctly in .env.local');
+          setError(
+            "No repositories found. Make sure your GitHub token is set correctly in .env.local"
+          );
         }
       } catch (err) {
-        setError('Failed to fetch repositories. Check console for details.');
+        setError("Failed to fetch repositories. Check console for details.");
         console.error(err);
       } finally {
         setIsLoading(false);
@@ -66,17 +77,32 @@ const DashboardPage = () => {
   }, []);
 
   const filteredRepos = repositories
-    .filter(repo =>
-      repo.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (languageFilter === "all" || !languageFilter ? true : repo.language === languageFilter) &&
-      (showSourceOnly ? !repo.fork : true)
+    .filter(
+      (repo) =>
+        repo.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (languageFilter === "all" || !languageFilter
+          ? true
+          : repo.language === languageFilter) &&
+        (showSourceOnly ? !repo.fork : true)
     )
     .sort((a, b) => {
-      if (sortOption === 'name') return a.name.localeCompare(b.name);
-      if (sortOption === 'stars') return b.stargazers_count - a.stargazers_count || a.name.localeCompare(b.name);
-      if (sortOption === 'forks') return b.forks_count - a.forks_count || a.name.localeCompare(b.name);
-      if (sortOption === 'updated') return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime() || a.name.localeCompare(b.name);
-      if (sortOption === 'progress') return (b.progress || 0) - (a.progress || 0) || a.name.localeCompare(b.name);
+      if (sortOption === "name") return a.name.localeCompare(b.name);
+      if (sortOption === "stars")
+        return (
+          b.stargazers_count - a.stargazers_count ||
+          a.name.localeCompare(b.name)
+        );
+      if (sortOption === "forks")
+        return b.forks_count - a.forks_count || a.name.localeCompare(b.name);
+      if (sortOption === "updated")
+        return (
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime() ||
+          a.name.localeCompare(b.name)
+        );
+      if (sortOption === "progress")
+        return (
+          (b.progress || 0) - (a.progress || 0) || a.name.localeCompare(b.name)
+        );
       return a.name.localeCompare(b.name); // Default fallback sort
     });
 
@@ -86,7 +112,9 @@ const DashboardPage = () => {
   );
 
   const totalPages = Math.ceil(filteredRepos.length / itemsPerPage) || 1;
-  const languages = Array.from(new Set(repositories.map(repo => repo.language)))
+  const languages = Array.from(
+    new Set(repositories.map((repo) => repo.language))
+  )
     .filter(Boolean)
     .sort();
 
@@ -96,9 +124,9 @@ const DashboardPage = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   // If not mounted yet, return a simple loading state without animations
@@ -116,8 +144,12 @@ const DashboardPage = () => {
           className="flex flex-col items-center"
         >
           <LoadingAnimation size={60} color="var(--primary)" />
-          <h2 className="text-2xl font-semibold text-primary mt-6">Loading repositories...</h2>
-          <p className="text-muted-foreground mt-2">Fetching your GitHub repositories</p>
+          <h2 className="text-2xl font-semibold text-primary mt-6">
+            Loading repositories...
+          </h2>
+          <p className="text-muted-foreground mt-2">
+            Fetching your GitHub repositories
+          </p>
         </motion.div>
       </div>
     );
@@ -138,14 +170,37 @@ const DashboardPage = () => {
                 <Github size={24} />
                 GitHub Connection Error
               </CardTitle>
-              <CardDescription className="text-red-500">{error}</CardDescription>
+              <CardDescription className="text-red-500">
+                {error}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="bg-white dark:bg-gray-800 p-4 rounded-md border border-yellow-200 dark:border-yellow-800">
-                <h3 className="font-semibold mb-2 text-amber-700 dark:text-amber-400">Troubleshooting:</h3>
+                <h3 className="font-semibold mb-2 text-amber-700 dark:text-amber-400">
+                  Troubleshooting:
+                </h3>
                 <ol className="list-decimal pl-5 space-y-2 text-amber-800 dark:text-amber-300">
-                  <li>Create a GitHub Personal Access Token at <a href="https://github.com/settings/tokens" className="text-blue-500 underline" target="_blank" rel="noopener noreferrer">github.com/settings/tokens</a></li>
-                  <li>Add the token to your <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">.env.local</code> file as <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">NEXT_PUBLIC_GITHUB_ACCESS_TOKEN=your_token</code></li>
+                  <li>
+                    Create a GitHub Personal Access Token at{" "}
+                    <a
+                      href="https://github.com/settings/tokens"
+                      className="text-blue-500 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      github.com/settings/tokens
+                    </a>
+                  </li>
+                  <li>
+                    Add the token to your{" "}
+                    <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">
+                      .env.local
+                    </code>{" "}
+                    file as{" "}
+                    <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">
+                      NEXT_PUBLIC_GITHUB_ACCESS_TOKEN=your_token
+                    </code>
+                  </li>
                   <li>Restart your development server</li>
                 </ol>
               </div>
@@ -162,7 +217,7 @@ const DashboardPage = () => {
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -173,11 +228,11 @@ const DashboardPage = () => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="inline-flex items-center justify-center p-2 mb-4 bg-primary/10 rounded-full"
+          className="inline-flex items-center justify-center"
         >
-          <Coffee size={32} className="text-primary" />
+          <Image src="/image.png" alt="Logo" width={120} height={120} className="rounded-lg object-cover"/>
         </motion.div>
-        <motion.h1 
+        <motion.h1
           className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-500"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -185,7 +240,7 @@ const DashboardPage = () => {
         >
           Job Not Finished
         </motion.h1>
-        <motion.p 
+        <motion.p
           className="text-muted-foreground max-w-md mx-auto"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -193,7 +248,7 @@ const DashboardPage = () => {
         >
           Track your unfinished projects and get motivated to complete them
         </motion.p>
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -202,7 +257,8 @@ const DashboardPage = () => {
         >
           <AlertCircle size={16} className="text-amber-500" />
           <span className="text-sm text-muted-foreground">
-            You have {repositories.length} projects, but how many will you actually finish?
+            You have {repositories.length} projects, but how many will you
+            actually finish?
           </span>
         </motion.div>
       </motion.div>
@@ -214,15 +270,20 @@ const DashboardPage = () => {
         className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
       >
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={18} />
+          <Search
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
+            size={18}
+          />
           <Input
             placeholder="Search repositories..."
             value={searchTerm}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchTerm(e.target.value)
+            }
             className="pl-10"
           />
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Filter size={18} className="text-muted-foreground" />
           <Select value={languageFilter} onValueChange={setLanguageFilter}>
@@ -231,7 +292,7 @@ const DashboardPage = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Languages</SelectItem>
-              {languages.map(language => (
+              {languages.map((language) => (
                 <SelectItem key={language} value={language}>
                   {language}
                 </SelectItem>
@@ -239,7 +300,7 @@ const DashboardPage = () => {
             </SelectContent>
           </Select>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <ArrowUpDown size={18} className="text-muted-foreground" />
           <Select value={sortOption} onValueChange={setSortOption}>
@@ -256,7 +317,7 @@ const DashboardPage = () => {
           </Select>
         </div>
       </motion.div>
-      
+
       {/* Source Only Filter */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -269,7 +330,9 @@ const DashboardPage = () => {
           checked={showSourceOnly}
           onCheckedChange={setShowSourceOnly}
         />
-        <Label htmlFor="source-only">Show only repositories you created (exclude forks)</Label>
+        <Label htmlFor="source-only">
+          Show only repositories you created (exclude forks)
+        </Label>
       </motion.div>
 
       {paginatedRepos.length === 0 ? (
@@ -284,7 +347,8 @@ const DashboardPage = () => {
           </div>
           <h3 className="text-xl font-semibold mb-2">No repositories found</h3>
           <p className="text-muted-foreground max-w-md mx-auto">
-            No repositories match your current filters. Try adjusting your search criteria or filters.
+            No repositories match your current filters. Try adjusting your
+            search criteria or filters.
           </p>
         </motion.div>
       ) : (
@@ -307,8 +371,11 @@ const DashboardPage = () => {
                 html_url={repo.html_url}
                 index={index}
                 isForked={repo.fork}
-                // Random values for demo purposes - in a real app, these would come from your backend
-                lastActivity={Math.floor(Math.random() * 100)}
+                lastActivity={Math.floor(
+                  (new Date().getTime() - new Date(repo.updated_at).getTime()) /
+                    (1000 * 60 * 60 * 24)
+                )}
+                // TODO: Get progress from backend or make it editable
                 progress={Math.floor(Math.random() * 100)}
               />
             ))}
@@ -324,40 +391,70 @@ const DashboardPage = () => {
       >
         <Button
           variant="outline"
-          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
           className="flex items-center gap-2"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-chevron-left"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
           Previous
         </Button>
-        
+
         <div className="flex items-center gap-1">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <Button
               key={page}
               variant={currentPage === page ? "default" : "outline"}
               size="icon"
               onClick={() => setCurrentPage(page)}
-              className={`w-8 h-8 ${currentPage === page ? 'text-primary-foreground' : ''}`}
+              className={`w-8 h-8 ${
+                currentPage === page ? "text-primary-foreground" : ""
+              }`}
             >
               {page}
             </Button>
           ))}
         </div>
-        
+
         <Button
           variant="outline"
-          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
           disabled={currentPage === totalPages}
           className="flex items-center gap-2"
         >
           Next
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-chevron-right"
+          >
+            <path d="m9 18 6-6-6-6" />
+          </svg>
         </Button>
       </motion.div>
     </div>
   );
 };
 
-export default DashboardPage; 
+export default DashboardPage;
