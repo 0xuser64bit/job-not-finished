@@ -13,6 +13,18 @@ export interface Repository {
   progress?: number; // Optional progress property for tracking project completion
 }
 
+interface GitHubRepoResponse {
+  id: number;
+  name: string;
+  description: string | null;
+  language: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  updated_at: string;
+  html_url: string;
+  fork: boolean;
+}
+
 export async function fetchUserRepositories(username: string): Promise<Repository[]> {
   try {
     const token = process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN;
@@ -29,7 +41,7 @@ export async function fetchUserRepositories(username: string): Promise<Repositor
     const response = await axios.get(`https://api.github.com/users/${username}/repos`, {
       headers,
     });
-    return response.data.map((repo: any) => ({
+    return response.data.map((repo: GitHubRepoResponse) => ({
       id: repo.id,
       name: repo.name,
       description: repo.description ?? '',
@@ -39,7 +51,7 @@ export async function fetchUserRepositories(username: string): Promise<Repositor
       updated_at: repo.updated_at ?? new Date().toISOString(),
       html_url: repo.html_url,
       fork: repo.fork,
-      progress: repo.progress
+      progress: undefined // No progress from GitHub API, will be set elsewhere
     }));
   } catch (error) {
     console.error('Error fetching repositories:', error);

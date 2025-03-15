@@ -16,9 +16,7 @@ import {
   Search,
   Filter,
   ArrowUpDown,
-  Loader2,
   Github,
-  Coffee,
   AlertCircle,
 } from "lucide-react";
 import {
@@ -29,14 +27,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import LoadingAnimation from "@/components/ui/loading-animation";
-import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 
 const DashboardPage = () => {
-  const router = useRouter();
   const [repositories, setRepositories] = useState<Repository[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");

@@ -23,19 +23,6 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
     }
   };
 
-  const circleVariants = {
-    initial: { opacity: 0.2 },
-    animate: {
-      opacity: [0.2, 1, 0.2],
-      transition: {
-        duration: 1.5,
-        ease: "easeInOut",
-        repeat: Infinity,
-        repeatType: "loop" as const
-      }
-    }
-  };
-
   return (
     <motion.div
       variants={containerVariants}
