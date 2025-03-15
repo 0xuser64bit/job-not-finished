@@ -9,6 +9,8 @@ export interface Repository {
   forks_count: number;
   updated_at: string;
   html_url: string;
+  fork: boolean;
+  progress?: number; // Optional progress property for tracking project completion
 }
 
 export async function fetchUserRepositories(username: string): Promise<Repository[]> {
@@ -35,7 +37,9 @@ export async function fetchUserRepositories(username: string): Promise<Repositor
       stargazers_count: repo.stargazers_count ?? 0,
       forks_count: repo.forks_count ?? 0,
       updated_at: repo.updated_at ?? new Date().toISOString(),
-      html_url: repo.html_url
+      html_url: repo.html_url,
+      fork: repo.fork,
+      progress: repo.progress
     }));
   } catch (error) {
     console.error('Error fetching repositories:', error);

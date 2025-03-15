@@ -12,7 +12,7 @@ import {
 import { fetchUserRepositories, Repository } from '@/lib/github';
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, ArrowUpDown, Loader2, Github } from 'lucide-react';
+import { Search, Filter, ArrowUpDown, Loader2, Github, Coffee, AlertCircle } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -22,6 +22,9 @@ import {
 } from "@/components/ui/card";
 import LoadingAnimation from '@/components/ui/loading-animation';
 import { useRouter } from 'next/navigation';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -33,6 +36,7 @@ const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [showSourceOnly, setShowSourceOnly] = useState(false);
 
   const itemsPerPage = 9; // Changed to 9 for a 3x3 grid
 
@@ -64,13 +68,15 @@ const DashboardPage = () => {
   const filteredRepos = repositories
     .filter(repo =>
       repo.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (languageFilter === "all" || !languageFilter ? true : repo.language === languageFilter)
+      (languageFilter === "all" || !languageFilter ? true : repo.language === languageFilter) &&
+      (showSourceOnly ? !repo.fork : true)
     )
     .sort((a, b) => {
       if (sortOption === 'name') return a.name.localeCompare(b.name);
       if (sortOption === 'stars') return b.stargazers_count - a.stargazers_count || a.name.localeCompare(b.name);
       if (sortOption === 'forks') return b.forks_count - a.forks_count || a.name.localeCompare(b.name);
       if (sortOption === 'updated') return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime() || a.name.localeCompare(b.name);
+      if (sortOption === 'progress') return (b.progress || 0) - (a.progress || 0) || a.name.localeCompare(b.name);
       return a.name.localeCompare(b.name); // Default fallback sort
     });
 
@@ -152,6 +158,11 @@ const DashboardPage = () => {
 
   return (
     <div className="container mx-auto py-8 px-4">
+      {/* Theme Toggle */}
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -164,7 +175,7 @@ const DashboardPage = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="inline-flex items-center justify-center p-2 mb-4 bg-primary/10 rounded-full"
         >
-          <Github size={32} className="text-primary" />
+          <Coffee size={32} className="text-primary" />
         </motion.div>
         <motion.h1 
           className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-blue-500"
@@ -172,7 +183,7 @@ const DashboardPage = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          GitHub Repositories
+          Job Not Finished
         </motion.h1>
         <motion.p 
           className="text-muted-foreground max-w-md mx-auto"
@@ -180,8 +191,20 @@ const DashboardPage = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          Browse, search and filter your GitHub repositories
+          Track your unfinished projects and get motivated to complete them
         </motion.p>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50"
+        >
+          <AlertCircle size={16} className="text-amber-500" />
+          <span className="text-sm text-muted-foreground">
+            You have {repositories.length} projects, but how many will you actually finish?
+          </span>
+        </motion.div>
       </motion.div>
 
       <motion.div
@@ -228,9 +251,25 @@ const DashboardPage = () => {
               <SelectItem value="stars">Stars</SelectItem>
               <SelectItem value="forks">Forks</SelectItem>
               <SelectItem value="updated">Last Updated</SelectItem>
+              <SelectItem value="progress">Progress</SelectItem>
             </SelectContent>
           </Select>
         </div>
+      </motion.div>
+      
+      {/* Source Only Filter */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6 }}
+        className="flex items-center space-x-2 mb-6"
+      >
+        <Switch
+          id="source-only"
+          checked={showSourceOnly}
+          onCheckedChange={setShowSourceOnly}
+        />
+        <Label htmlFor="source-only">Show only repositories you created (exclude forks)</Label>
       </motion.div>
 
       {paginatedRepos.length === 0 ? (
@@ -267,6 +306,10 @@ const DashboardPage = () => {
                 updatedAt={repo.updated_at}
                 html_url={repo.html_url}
                 index={index}
+                isForked={repo.fork}
+                // Random values for demo purposes - in a real app, these would come from your backend
+                lastActivity={Math.floor(Math.random() * 100)}
+                progress={Math.floor(Math.random() * 100)}
               />
             ))}
           </AnimatePresence>
