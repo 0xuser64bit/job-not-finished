@@ -39,7 +39,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [showSourceOnly, setShowSourceOnly] = useState(false);
+  const [showSourceOnly, setShowSourceOnly] = useState(true);
 
   const itemsPerPage = 9;
 
