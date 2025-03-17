@@ -53,13 +53,13 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         console.log("Fetching repositories for username:", username);
         const repos = await fetchUserRepositories(username);
         setRepositories(repos);
         if (repos.length === 0) {
           setError(
-            "No repositories found. Make sure your GitHub token is set correctly in .env.local"
+            "No repositories found. Make sure your GitHub token is set correctly in .env.local",
           );
         }
       } catch (err) {
@@ -79,7 +79,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         (languageFilter === "all" || !languageFilter
           ? true
           : repo.language === languageFilter) &&
-        (showSourceOnly ? !repo.fork : true)
+        (showSourceOnly ? !repo.fork : true),
     )
     .sort((a, b) => {
       if (sortOption === "name") return a.name.localeCompare(b.name);
@@ -104,12 +104,12 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
 
   const paginatedRepos = filteredRepos.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const totalPages = Math.ceil(filteredRepos.length / itemsPerPage) || 1;
   const languages = Array.from(
-    new Set(repositories.map((repo) => repo.language))
+    new Set(repositories.map((repo) => repo.language)),
   )
     .filter(Boolean)
     .sort();
@@ -206,9 +206,8 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      {/* Theme Toggle */}
-      <div className="absolute top-4 right-4">
+    <div className="container mx-auto py-8 px-4 relative">
+      <div className="absolute top-4 right-0 z-10">
         <ThemeToggle />
       </div>
 
@@ -261,6 +260,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
             actually finish?
           </span>
         </motion.div>
+        
       </motion.div>
 
       <motion.div
@@ -373,7 +373,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
                 isForked={repo.fork}
                 lastActivity={Math.floor(
                   (new Date().getTime() - new Date(repo.updated_at).getTime()) /
-                    (1000 * 60 * 60 * 24)
+                    (1000 * 60 * 60 * 24),
                 )}
                 // TODO: Get progress from backend or make it editable
                 progress={Math.floor(Math.random() * 100)}
@@ -457,4 +457,4 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
   );
 };
 
-export default DashboardClient; 
+export default DashboardClient;
