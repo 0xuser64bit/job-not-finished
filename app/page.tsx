@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await auth();
   const isLoggedIn = !!session?.user;
   const username = session?.user?.githubUsername || session?.user?.name || session?.user?.email || "User";
+  if(isLoggedIn){
+    redirect("/dashboard");
+  }
 
   return (
     <div className="grid container mx-auto sm:pt-10 grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen pb-20 gap-16 font-[family-name:var(--font-geist-sans)]">
