@@ -149,7 +149,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
     );
   }
 
-  if (error) {
+  if (error && repositories.length !== 0) {
     return (
       <div className="p-8 flex flex-col justify-center items-center min-h-[80vh]">
         <motion.div

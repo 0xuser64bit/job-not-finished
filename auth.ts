@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { SignInParams } from "./types";
 
 export const {
   handlers: { GET, POST },
@@ -27,8 +29,8 @@ export const {
   callbacks: {
     async jwt({ token, account, profile }) {
       // Persist the GitHub username to the token
-      if (account && account.provider === 'github' && profile) {
-        token.githubUsername = profile.login || '';
+      if (account && account.provider === 'github' && profile && typeof profile.login === 'string') {
+        token.githubUsername = profile.login;
       }
       return token;
     },
@@ -39,6 +41,20 @@ export const {
         session.user.githubUsername = token.githubUsername;
       }
       return session;
+    },
+    async signIn({ user, account, profile }: SignInParams) {
+      if (account?.provider === 'github' && profile && typeof profile.login === 'string') {
+        // Create or update user record
+        await prisma.user.upsert({
+          where: { githubId: profile.login },
+          update: { githubId: profile.login },
+          create: {
+            githubId: profile.login,
+            email: null,
+          },
+        });
+      }
+      return true;
     },
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
