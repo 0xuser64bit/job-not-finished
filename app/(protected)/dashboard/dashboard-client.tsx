@@ -32,6 +32,7 @@ interface DashboardClientProps {
 
 const DashboardClient = ({ username }: DashboardClientProps) => {
   const [repositories, setRepositories] = useState<Repository[]>([]);
+  const [totalRepos, setTotalRepos] = useState("0");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [languageFilter, setLanguageFilter] = useState("all");
@@ -55,8 +56,9 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         setError(null);
 
         console.log("Fetching repositories for username:", username);
-        const repos = await fetchUserRepositories(username);
+        const { public_repos, repos } = await fetchUserRepositories(username);
         setRepositories(repos);
+        setTotalRepos(public_repos);
         if (repos.length === 0) {
           setError(
             "No repositories found. Make sure your GitHub token is set correctly in .env.local",
@@ -256,11 +258,10 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         >
           <AlertCircle size={16} className="text-amber-500" />
           <span className="text-sm text-muted-foreground">
-            You have {repositories.length} projects, but how many will you
-            actually finish?
+            You have {totalRepos} projects, but how many will you actually
+            finish?
           </span>
         </motion.div>
-        
       </motion.div>
 
       <motion.div

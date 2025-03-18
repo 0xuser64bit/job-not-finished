@@ -1,4 +1,4 @@
-import axios from "axios";
+import { Octokit } from "octokit";
 
 export interface Repository {
   id: number;
@@ -13,6 +13,10 @@ export interface Repository {
   progress?: number; // Optional progress property for tracking project completion
 }
 
+export interface RepositoryResponse {
+  public_repos: string;
+  repos: Repository[];
+}
 interface GitHubRepoResponse {
   id: number;
   name: string;
@@ -25,41 +29,41 @@ interface GitHubRepoResponse {
   fork: boolean;
 }
 
+const octokit = new Octokit({
+  auth: process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN,
+});
+
 export async function fetchUserRepositories(
   username: string,
-): Promise<Repository[]> {
+): Promise<RepositoryResponse> {
   try {
-    const token = process.env.NEXT_PUBLIC_GITHUB_ACCESS_TOKEN;
-    const headers: Record<string, string> = {
-      Accept: "application/vnd.github.v3+json",
-      "X-GitHub-Api-Version": "2022-11-28",
-    };
-
-    // Add authorization header only if token exists
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    const response = await axios.get(
-      `https://api.github.com/users/${username}/repos`,
-      {
-        headers,
+    const responseUser = await octokit.request(`GET /users/${username}`);
+    const response = await octokit.request(`GET /users/${username}/repos`, {
+      headers: {
+        "X-GitHub-Api-Version": "2022-11-28",
       },
-    );
-    return response.data.map((repo: GitHubRepoResponse) => ({
-      id: repo.id,
-      name: repo.name,
-      description: repo.description ?? "",
-      language: repo.language ?? null,
-      stargazers_count: repo.stargazers_count ?? 0,
-      forks_count: repo.forks_count ?? 0,
-      updated_at: repo.updated_at ?? new Date().toISOString(),
-      html_url: repo.html_url,
-      fork: repo.fork,
-      progress: undefined, // No progress from GitHub API, will be set elsewhere
-    }));
+      per_page: 100,
+    });
+    return {
+      public_repos: responseUser.data.public_repos as string,
+      repos: response.data.map((repo: GitHubRepoResponse) => ({
+        id: repo.id,
+        name: repo.name,
+        description: repo.description ?? "",
+        language: repo.language ?? null,
+        stargazers_count: repo.stargazers_count,
+        forks_count: repo.forks_count,
+        updated_at: repo.updated_at,
+        html_url: repo.html_url,
+        fork: repo.fork,
+        progress: undefined,
+      })),
+    };
   } catch (error) {
     console.error("Error fetching repositories:", error);
-    return [];
+    return {
+      public_repos: "0",
+      repos: [],
+    };
   }
 }

@@ -31,4 +31,4 @@ CREATE UNIQUE INDEX "User_githubId_key" ON "User"("githubId");
 CREATE INDEX "Project_userId_idx" ON "Project"("userId");
 
 -- AddForeignKey
-ALTER TABLE "Project" ADD CONSTRAINT "Project_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Project" ADD CONSTRAINT "Project_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("githubId") ON DELETE RESTRICT ON UPDATE CASCADE;

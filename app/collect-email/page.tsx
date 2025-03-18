@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import LoadingAnimation from '@/components/ui/loading-animation';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import LoadingAnimation from "@/components/ui/loading-animation";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function CollectEmail() {
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
   const { data: session, update, status } = useSession();
 
   // Redirect to signin if not authenticated
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/signin');
+    if (status === "unauthenticated") {
+      router.push("/signin");
     }
   }, [status, router]);
 
   // Show loading state while checking session
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <LoadingAnimation size={50} />
@@ -31,33 +31,32 @@ export default function CollectEmail() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch('/api/user/email', {
-        method: 'POST',
+      const response = await fetch("/api/user/email", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save email');
+        throw new Error("Failed to save email");
       }
-
       // Update session to include email
       await update();
-      
+
       // Redirect to dashboard
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch (err) {
-      setError('Failed to save email. Please try again.');
+      setError("Failed to save email. Please try again.");
     }
   };
 
   // Only show form if authenticated
-  if (status === 'authenticated') {
+  if (status === "authenticated") {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="w-full max-w-md space-y-8">
@@ -86,14 +85,13 @@ export default function CollectEmail() {
             </div>
 
             {error && (
-              <div className="text-destructive text-sm text-center">{error}</div>
+              <div className="text-destructive text-sm text-center">
+                {error}
+              </div>
             )}
 
             <div>
-              <Button
-                type="submit"
-                className="w-full"
-              >
+              <Button type="submit" className="w-full">
                 Continue to Dashboard
               </Button>
             </div>
@@ -104,4 +102,4 @@ export default function CollectEmail() {
   }
 
   return null;
-} 
+}
