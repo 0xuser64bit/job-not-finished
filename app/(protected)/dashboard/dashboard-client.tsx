@@ -357,6 +357,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
             {paginatedRepos.map((repo, index) => (
               <RepositoryCard
                 key={repo.id}
+                repo_id={repo.id}
                 name={repo.name}
                 description={repo.description}
                 language={repo.language}

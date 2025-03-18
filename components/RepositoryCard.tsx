@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -18,12 +18,18 @@ import {
   AlertCircle,
   Calendar,
   Coffee,
+  Pencil,
+  Save,
+  Circle,
 } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
+import { Input } from "./ui/input";
+import { updateProgress } from "@/app/actions/update-progress";
 
 interface RepositoryCardProps {
+  repo_id: number;
   name: string;
   description: string;
   language: string;
@@ -72,6 +78,7 @@ const getMotivationalRoast = (days: number, progress: number) => {
 };
 
 const RepositoryCard: React.FC<RepositoryCardProps> = ({
+  repo_id,
   name,
   description,
   language,
@@ -81,9 +88,13 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
   html_url,
   index,
   isForked = false,
-  lastActivity = Math.floor(Math.random() * 100),
-  progress = Math.floor(Math.random() * 100),
+  lastActivity,
+  progress,
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [progressValue, setProgressValue] = useState(progress);
+  const [currentProgress, setCurrentProgress] = useState(progress);
   const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -93,14 +104,32 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
 
   const languageColor =
     languageColors[language as keyof typeof languageColors] || "#cccccc";
-  const roast = getMotivationalRoast(lastActivity, progress);
+  const roast = getMotivationalRoast(lastActivity || 0, progress || 0);
 
   // Determine status color based on last activity and progress
   const getStatusColor = () => {
-    if (lastActivity > 60) return "destructive";
-    if (lastActivity > 30) return "warning";
-    if (lastActivity > 14) return "info";
+    if (lastActivity && lastActivity > 60) return "destructive";
+    if (lastActivity && lastActivity > 30) return "warning";
+    if (lastActivity && lastActivity > 14) return "info";
     return "success";
+  };
+
+  const handleProgressUpdate = async () => {
+    setIsEditing(false);
+    setIsLoading(true);
+
+    try {
+      await updateProgress({
+        repo_id: repo_id.toString(),
+        newProgressValue: progressValue || 0,
+      });
+      // Update the local state to reflect the new progress value
+      setCurrentProgress(progressValue);
+    } catch (error) {
+      console.error("Failed to update progress:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -180,9 +209,46 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium">Project Progress</span>
-              <Badge variant={getStatusColor()}>{progress}%</Badge>
+              {!isEditing ? (
+                <div className="flex items-center gap-1">
+                  <Badge variant={getStatusColor()}>{currentProgress}%</Badge>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full gap-1 hover:bg-primary hover:text-primary-foreground transition-colors"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    <Pencil size={14} />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1">
+                  <Input
+                    value={progressValue || 0}
+                    onChange={(e) =>
+                      parseInt(e.target.value) > 100
+                        ? setProgressValue(100)
+                        : setProgressValue(parseInt(e.target.value))
+                    }
+                    type="number"
+                    min={0}
+                    max={100}
+                  />
+                  <Button
+                    size="sm"
+                    onClick={handleProgressUpdate}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <Circle className="animate-spin" />
+                    ) : (
+                      <Save size={14} />
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
-            <Progress value={progress} className="h-2" />
+            <Progress value={currentProgress} className="h-2" />
           </div>
 
           {/* Motivational Roast */}

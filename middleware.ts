@@ -1,7 +1,8 @@
-import { auth } from "./auth";
+"use server";
+
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getUser } from "./app/actions/get-user";
+import { auth } from "./auth";
 
 export default auth(async (req) => {
   // req.auth contains the user's session
@@ -24,10 +25,7 @@ export default auth(async (req) => {
   // If logged in, check if email is collected
   if (isLoggedIn && req.auth?.user?.githubUsername) {
     try {
-      const user = await prisma.user.findUnique({
-        where: { githubId: req.auth.user.githubUsername },
-      });
-
+      const user = await getUser({ username: req.auth.user.githubUsername });
       // If email is not collected and trying to access dashboard or other protected routes (not collect-email)
       if (!user?.email && nextUrl.pathname.startsWith("/dashboard")) {
         console.log("Redirecting to collect-email because email is not set");

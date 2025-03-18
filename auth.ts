@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 import { SignInParams } from "./types";
 
 export const {

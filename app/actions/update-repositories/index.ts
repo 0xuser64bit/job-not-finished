@@ -1,7 +1,7 @@
 "use server";
 
 import { fetchUserRepositories } from "@/lib/github";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 export const UpdateRepositoriesAction = async ({
   username,
