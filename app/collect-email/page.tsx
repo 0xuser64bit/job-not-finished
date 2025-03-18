@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import LoadingAnimation from "@/components/ui/loading-animation";
+import { Circle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ import { useEffect, useState } from "react";
 export default function CollectEmail() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session, update, status } = useSession();
 
@@ -34,6 +36,7 @@ export default function CollectEmail() {
     setError("");
 
     try {
+      setIsLoading(true);
       const response = await fetch("/api/user/email", {
         method: "POST",
         headers: {
@@ -47,6 +50,7 @@ export default function CollectEmail() {
       }
       // Update session to include email
       await update();
+      setIsLoading(false);
 
       // Redirect to dashboard
       router.push("/dashboard");
@@ -92,7 +96,11 @@ export default function CollectEmail() {
 
             <div>
               <Button type="submit" className="w-full">
-                Continue to Dashboard
+                {isLoading ? (
+                  <Circle className="animate-spin" />
+                ) : (
+                  "Continue to Dashboard"
+                )}
               </Button>
             </div>
           </form>

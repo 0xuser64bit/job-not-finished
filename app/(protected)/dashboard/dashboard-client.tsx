@@ -25,6 +25,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
+import { UpdateRepositoriesAction } from "@/app/actions/update-repositories";
 
 interface DashboardClientProps {
   username: string;
@@ -55,8 +56,10 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         setIsLoading(true);
         setError(null);
 
-        console.log("Fetching repositories for username:", username);
-        const { public_repos, repos } = await fetchUserRepositories(username);
+        const { public_repos, repos } = await UpdateRepositoriesAction({
+          username,
+        });
+        console.log("repos ", repos);
         setRepositories(repos);
         setTotalRepos(public_repos);
         if (repos.length === 0) {
@@ -377,7 +380,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
                     (1000 * 60 * 60 * 24),
                 )}
                 // TODO: Get progress from backend or make it editable
-                progress={Math.floor(Math.random() * 100)}
+                progress={repo.progress || 0}
               />
             ))}
           </AnimatePresence>
