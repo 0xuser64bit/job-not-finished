@@ -33,4 +33,4 @@ export interface SignInParams {
   profile?: Profile;
   email?: { verificationRequest?: boolean };
   credentials?: Record<string, any>;
-} 
+}

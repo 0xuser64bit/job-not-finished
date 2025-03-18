@@ -1,18 +1,7 @@
 "use client";
+import { UpdateRepositoriesAction } from "@/app/actions/update-repositories";
 import RepositoryCard from "@/components/RepositoryCard";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { fetchUserRepositories, Repository } from "@/lib/github";
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ArrowUpDown, Github, AlertCircle } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -20,12 +9,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import LoadingAnimation from "@/components/ui/loading-animation";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import LoadingAnimation from "@/components/ui/loading-animation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Repository } from "@/lib/github";
+import { AnimatePresence, motion } from "framer-motion";
+import { AlertCircle, ArrowUpDown, Filter, Github, Search } from "lucide-react";
 import Image from "next/image";
-import { UpdateRepositoriesAction } from "@/app/actions/update-repositories";
+import React, { useEffect, useState } from "react";
 
 interface DashboardClientProps {
   username: string;
@@ -40,15 +40,9 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
   const [sortOption, setSortOption] = useState("name");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
   const [showSourceOnly, setShowSourceOnly] = useState(true);
 
   const itemsPerPage = 9;
-
-  // Fix hydration issues by ensuring client-side only rendering for components with animations
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,9 +124,6 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
     },
   };
 
-  if (!mounted) {
-    return null;
-  }
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh]">

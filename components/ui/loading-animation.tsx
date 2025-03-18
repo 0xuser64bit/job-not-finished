@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 interface LoadingAnimationProps {
@@ -12,6 +12,17 @@ const LoadingAnimation: React.FC<LoadingAnimationProps> = ({
   size = 40,
   color = "currentColor",
 }) => {
+  const [mounted, setMounted] = useState(false);
+
+  // Fix hydration issues by ensuring client-side only rendering for components with animations
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
   const containerVariants = {
     animate: {
       rotate: 360,

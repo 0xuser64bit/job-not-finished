@@ -29,4 +29,4 @@ export async function POST(req: Request) {
     console.error("Error updating email:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
-} 
+}

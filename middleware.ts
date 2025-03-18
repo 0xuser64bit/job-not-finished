@@ -13,7 +13,7 @@ export default auth(async (req) => {
   const isPublicRoute =
     nextUrl.pathname === "/" ||
     nextUrl.pathname === "/signin" ||
-    nextUrl.pathname.startsWith("/api/auth") || 
+    nextUrl.pathname.startsWith("/api/auth") ||
     nextUrl.pathname === "/collect-email";
 
   // If trying to access a protected route while not logged in
@@ -56,7 +56,7 @@ export default auth(async (req) => {
 export const config = {
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico).*)",
-    "/dashboard/:path*", 
-    "/collect-email"
+    "/dashboard/:path*",
+    "/collect-email",
   ],
 };
