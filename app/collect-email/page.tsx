@@ -13,7 +13,7 @@ export default function CollectEmail() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { data: session, update, status } = useSession();
+  const { update, status } = useSession();
 
   // Redirect to signin if not authenticated
   useEffect(() => {
@@ -54,8 +54,10 @@ export default function CollectEmail() {
 
       // Redirect to dashboard
       router.push("/dashboard");
-    } catch (err) {
+    } catch (error) {
+      setIsLoading(false);
       setError("Failed to save email. Please try again.");
+      console.error("Error saving email:", error);
     }
   };
 
@@ -69,7 +71,7 @@ export default function CollectEmail() {
               Welcome! Please provide your email
             </h2>
             <p className="mt-2 text-center text-sm text-muted-foreground">
-              We'll use this to send you updates about your projects
+              We&apos;ll use this to send you updates about your projects
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
