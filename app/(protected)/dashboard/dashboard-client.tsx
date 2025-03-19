@@ -23,9 +23,10 @@ import { Switch } from "@/components/ui/switch";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Repository } from "@/lib/github";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, ArrowUpDown, Filter, Github, Search } from "lucide-react";
+import { AlertCircle, ArrowUpDown, Filter, Github, RefreshCw, Search } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface DashboardClientProps {
   username: string;
@@ -41,8 +42,26 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showSourceOnly, setShowSourceOnly] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const itemsPerPage = 9;
+
+  const refreshRepositories = async () => {
+    try {
+      setIsRefreshing(true);
+      const { public_repos, repos } = await UpdateRepositoriesAction({
+        username,
+      });
+      setRepositories(repos);
+      setTotalRepos(public_repos);
+      toast.success("Repositories refreshed successfully");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to refresh repositories");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +72,6 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         const { public_repos, repos } = await UpdateRepositoriesAction({
           username,
         });
-        console.log("repos ", repos);
         setRepositories(repos);
         setTotalRepos(public_repos);
         if (repos.length === 0) {
@@ -203,7 +221,16 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
 
   return (
     <div className="container mx-auto py-8 px-4 relative">
-      <div className="absolute top-4 right-0 z-10">
+      <div className="absolute top-4 right-0 z-10 flex items-center gap-4">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={refreshRepositories}
+          disabled={isRefreshing}
+          className="rounded-full"
+        >
+          <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+        </Button>
         <ThemeToggle />
       </div>
 
@@ -367,6 +394,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
                 html_url={repo.html_url}
                 index={index}
                 isForked={repo.fork}
+                project_reminder={repo.project_reminder}
                 lastActivity={Math.floor(
                   (new Date().getTime() - new Date(repo.updated_at).getTime()) /
                     (1000 * 60 * 60 * 24),

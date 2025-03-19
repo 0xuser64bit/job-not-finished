@@ -27,6 +27,7 @@ model Project {
   name      String
   progress  Int      @default(0) // 0-100
   userId    String
+  reminder  Boolean? @default(false)
   user      User     @relation(fields: [userId], references: [githubId])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

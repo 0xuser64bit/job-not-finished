@@ -21,12 +21,14 @@ import {
   Pencil,
   Save,
   Circle,
+  BellRing,
 } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Progress } from "./ui/progress";
 import { Input } from "./ui/input";
 import { updateProgress } from "@/app/actions/update-progress";
+import { toggleReminder } from "@/app/actions/toggle-reminder";
 
 interface RepositoryCardProps {
   repo_id: number;
@@ -40,6 +42,7 @@ interface RepositoryCardProps {
   index: number;
   isForked?: boolean;
   lastActivity?: number;
+  project_reminder?: boolean;
   progress?: number;
 }
 
@@ -89,12 +92,14 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
   index,
   isForked = false,
   lastActivity,
+  project_reminder,
   progress,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [progressValue, setProgressValue] = useState(progress);
   const [currentProgress, setCurrentProgress] = useState(progress);
+  const [reminder, setReminder] = useState(project_reminder || false);
   const formattedDate = new Date(updatedAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -130,6 +135,13 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
     } finally {
       setIsLoading(false);
     }
+  };
+  const handleSetReninder = async () => {
+    await toggleReminder({
+      repo_id: repo_id.toString(),
+      project_reminder: reminder ?? false,
+    });
+    setReminder(!reminder);
   };
 
   return (
@@ -287,9 +299,20 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <Button variant="default" size="sm" className="w-full gap-1">
-              <AlertCircle size={14} />
-              Set Reminder
+            <Button
+              variant={reminder ? "secondary" : "default"}
+              size="sm"
+              className={`w-full gap-1`}
+              onClick={handleSetReninder}
+            >
+              {reminder ? (
+                <BellRing size={14} />
+              ) : (
+                <>
+                  <AlertCircle size={14} />
+                  Set Reminder
+                </>
+              )}
             </Button>
           </motion.div>
         </CardFooter>

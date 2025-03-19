@@ -10,6 +10,7 @@ export interface Repository {
   updated_at: string;
   html_url: string;
   fork: boolean;
+  project_reminder?: boolean;
   progress?: number; // Optional progress property for tracking project completion
 }
 

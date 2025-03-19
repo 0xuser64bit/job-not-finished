@@ -36,6 +36,7 @@ export const UpdateRepositoriesAction = async ({
     html_url: repo.html_url,
     fork: repo.fork,
     userId: username,
+    reminder: reposDB.find((dbRepo) => dbRepo.id === repo.id.toString())?.reminder,
     progress: reposDB.find((dbRepo) => dbRepo.id === repo.id.toString())
       ?.progress,
   }));
