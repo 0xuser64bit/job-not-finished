@@ -37,12 +37,12 @@ export default function CollectEmail() {
 
     try {
       setIsLoading(true);
-      const response = await fetch("/api/user/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
+      const response = await fetch("https://job-not-finished.vercel.app/api/user/email", {
+          method: "POST", 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {

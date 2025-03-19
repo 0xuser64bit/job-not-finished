@@ -23,7 +23,14 @@ import { Switch } from "@/components/ui/switch";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Repository } from "@/lib/github";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlertCircle, ArrowUpDown, Filter, Github, RefreshCw, Search } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowUpDown,
+  Filter,
+  Github,
+  RefreshCw,
+  Search,
+} from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -229,7 +236,9 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
           disabled={isRefreshing}
           className="rounded-full"
         >
-          <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+          <RefreshCw
+            className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+          />
         </Button>
         <ThemeToggle />
       </div>

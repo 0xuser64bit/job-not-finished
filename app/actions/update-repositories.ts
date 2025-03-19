@@ -29,7 +29,7 @@ export async function UpdateRepositoriesAction({
 
       // Create a map for efficient lookup
       const projectMap = new Map(
-        dbProjects.map((project) => [project.id, project])
+        dbProjects.map((project) => [project.id, project]),
       );
 
       // Merge GitHub repositories with database information
@@ -48,7 +48,9 @@ export async function UpdateRepositoriesAction({
       const newRepoIds = repoIds.filter((id) => !existingIds.includes(id));
 
       if (newRepoIds.length > 0 && userId) {
-        const newRepos = repos.filter((repo) => newRepoIds.includes(repo.id.toString()));
+        const newRepos = repos.filter((repo) =>
+          newRepoIds.includes(repo.id.toString()),
+        );
         await prisma.project.createMany({
           data: newRepos.map((repo) => ({
             id: repo.id.toString(),
@@ -69,4 +71,4 @@ export async function UpdateRepositoriesAction({
     console.error("Error updating repositories:", error);
     throw error;
   }
-} 
+}
