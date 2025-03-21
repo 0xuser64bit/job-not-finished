@@ -124,15 +124,41 @@ async function generateProjectRoast(repo: GitHubRepo): Promise<ProjectRoast> {
     }
 }
 
+// Helper function to verify cron job authentication
+function verifyAuth(request: NextRequest): boolean {
+    const secret = request.nextUrl.searchParams.get('secret');
+    const authHeader = request.headers.get('authorization');
+    
+    // Extract token from Bearer header if present
+    const authToken = authHeader?.startsWith('Bearer ') 
+        ? authHeader.substring(7) 
+        : null;
+    
+    // Fix for URL encoding: In query parameters, + characters are converted to spaces
+    const fixedSecret = secret?.replace(/ /g, '+');
+    
+    // Check against environment variable
+    return fixedSecret === CRON_SECRET || authToken === CRON_SECRET;
+}
+
 export async function GET(request: NextRequest) {
     console.log(`[Cron Job] Weekly reminder triggered at ${new Date().toISOString()}`);
     
-    const searchParams = request.nextUrl.searchParams;
-    const secret = searchParams.get('secret');
+    // Set cache control headers to prevent caching
+    const headers = new Headers({
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Surrogate-Control': 'no-store'
+    });
     
-    if (!secret || secret !== CRON_SECRET) {
+    // Verify authentication
+    if (!verifyAuth(request)) {
         console.error('[Cron Job] Unauthorized access attempt');
-        return NextResponse.json({ error: 'Unauthorized access' }, { status: 401 });
+        return NextResponse.json(
+            { error: 'Unauthorized access' }, 
+            { status: 401, headers }
+        );
     }
 
     try {
@@ -269,18 +295,24 @@ export async function GET(request: NextRequest) {
 
         console.log(`[Cron Job] Email batch completed. Success: ${successCount}, Failed: ${failureCount}`);
         
-        return NextResponse.json({ 
-            success: true, 
-            data: {
-                totalEmails: emailResults.length,
-                successCount,
-                failureCount,
-                details: emailResults
-            } 
-        });
+        return NextResponse.json(
+            { 
+                success: true, 
+                data: {
+                    totalEmails: emailResults.length,
+                    successCount,
+                    failureCount,
+                    details: emailResults
+                } 
+            },
+            { headers }
+        );
     } catch (error) {
         console.error('[Cron Job] Error processing reminders:', error);
-        return NextResponse.json({ error: error }, { status: 500 });
+        return NextResponse.json(
+            { error: error }, 
+            { status: 500, headers }
+        );
     }
 }
 

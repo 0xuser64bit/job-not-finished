@@ -3,28 +3,45 @@
 import { NextResponse } from "next/server";
 import { getUser } from "./app/actions/get-user";
 import { auth } from "./auth";
+import { NextRequest } from "next/server";
 
 // Secret key for cron job access
 const CRON_SECRET = process.env.CRON_SECRET;
 
+// Create a standalone function to check if this is a cron job request
+function isCronRequest(request: NextRequest): boolean {
+  const { pathname } = request.nextUrl;
+  const secret = request.nextUrl.searchParams.get("secret");
+  const authHeader = request.headers.get("authorization");
+  
+  // Check if this is the cron endpoint with valid secret (either in query or header)
+  const isValidCronEndpoint = 
+    pathname === "/api/reminder/sendEmail" && 
+    (secret === CRON_SECRET || authHeader === `Bearer ${CRON_SECRET}`);
+  
+  return isValidCronEndpoint;
+}
+
+// Middleware handler that gets wrapped by NextAuth
 export default auth(async (req) => {
-  // req.auth contains the user's session
-  // This middleware is called for all routes
+  // First check if this is a cron request BEFORE any other logic
+  if (isCronRequest(req)) {
+    console.log("[Middleware Debug] Valid cron job request detected - bypassing auth");
+    const response = NextResponse.next();
+    response.headers.set("x-middleware-cache", "no-cache");
+    return response;
+  }
+
+  // If not a cron request, proceed with regular auth flow
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-
-  // Check if this is the cron job endpoint with valid secret
-  const isCronEndpoint = 
-    nextUrl.pathname === "/api/reminder/sendEmail" && 
-    nextUrl.searchParams.get("secret") === CRON_SECRET;
 
   // Public routes accessible to all users
   const isPublicRoute =
     nextUrl.pathname === "/" ||
     nextUrl.pathname === "/signin" ||
     nextUrl.pathname.startsWith("/api/auth") ||
-    nextUrl.pathname === "/collect-email" ||
-    isCronEndpoint;
+    nextUrl.pathname === "/collect-email";
 
   // If trying to access a protected route while not logged in
   if (!isPublicRoute && !isLoggedIn) {
@@ -59,10 +76,10 @@ export default auth(async (req) => {
   return NextResponse.next();
 });
 
-// This ensures the middleware is called for all routes
+// This ensures the middleware is called for all routes except our cron job endpoints
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/reminder/sendEmail).*)",
     "/dashboard/:path*",
     "/collect-email",
   ],
