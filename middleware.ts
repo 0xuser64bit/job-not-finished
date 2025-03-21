@@ -13,12 +13,12 @@ function isCronRequest(request: NextRequest): boolean {
   const { pathname } = request.nextUrl;
   const secret = request.nextUrl.searchParams.get("secret");
   const authHeader = request.headers.get("authorization");
-  
+
   // Check if this is the cron endpoint with valid secret (either in query or header)
-  const isValidCronEndpoint = 
-    pathname === "/api/reminder/sendEmail" && 
+  const isValidCronEndpoint =
+    pathname === "/api/reminder/sendEmail" &&
     (secret === CRON_SECRET || authHeader === `Bearer ${CRON_SECRET}`);
-  
+
   return isValidCronEndpoint;
 }
 
@@ -26,7 +26,9 @@ function isCronRequest(request: NextRequest): boolean {
 export default auth(async (req) => {
   // First check if this is a cron request BEFORE any other logic
   if (isCronRequest(req)) {
-    console.log("[Middleware Debug] Valid cron job request detected - bypassing auth");
+    console.log(
+      "[Middleware Debug] Valid cron job request detected - bypassing auth",
+    );
     const response = NextResponse.next();
     response.headers.set("x-middleware-cache", "no-cache");
     return response;

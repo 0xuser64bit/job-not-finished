@@ -38,11 +38,11 @@ export default function CollectEmail() {
     try {
       setIsLoading(true);
       const response = await fetch("/api/user/email", {
-          method: "POST", 
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {

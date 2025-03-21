@@ -55,10 +55,10 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
 
   // Handle progress update from a repository card
   const handleProgressUpdate = (repoId: number, newProgress: number) => {
-    setRepositories(prevRepos => 
-      prevRepos.map(repo => 
-        repo.id === repoId ? { ...repo, progress: newProgress } : repo
-      )
+    setRepositories((prevRepos) =>
+      prevRepos.map((repo) =>
+        repo.id === repoId ? { ...repo, progress: newProgress } : repo,
+      ),
     );
   };
 
