@@ -73,7 +73,9 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
       });
       setRepositories(repos);
       setTotalUnCompletedProjects(() => {
-        return repos.filter((repo) => repo.progress !== 100).length.toString();
+        return repos
+          .filter((repo) => !repo.fork && repo.progress !== 100)
+          .length.toString();
       });
       toast.success("Repositories refreshed successfully");
     } catch (err) {
@@ -96,7 +98,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         setRepositories(repos);
         setTotalUnCompletedProjects(() => {
           return repos
-            .filter((repo) => repo.progress !== 100)
+            .filter((repo) => !repo.fork && repo.progress !== 100)
             .length.toString();
         });
         if (repos.length === 0) {
