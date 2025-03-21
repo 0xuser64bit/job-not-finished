@@ -48,10 +48,19 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
   const [sortOption, setSortOption] = useState("name");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showSourceOnly, setShowSourceOnly] = useState(true);
+  const [excludeRepo, setExcludeRepo] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const itemsPerPage = 9;
+
+  // Handle progress update from a repository card
+  const handleProgressUpdate = (repoId: number, newProgress: number) => {
+    setRepositories(prevRepos => 
+      prevRepos.map(repo => 
+        repo.id === repoId ? { ...repo, progress: newProgress } : repo
+      )
+    );
+  };
 
   const refreshRepositories = async () => {
     try {
@@ -103,7 +112,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         (languageFilter === "all" || !languageFilter
           ? true
           : repo.language === languageFilter) &&
-        (showSourceOnly ? !repo.fork : true),
+        (excludeRepo ? !repo.fork && repo.progress !== 100 : true),
     )
     .sort((a, b) => {
       if (sortOption === "name") return a.name.localeCompare(b.name);
@@ -358,11 +367,11 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
       >
         <Switch
           id="source-only"
-          checked={showSourceOnly}
-          onCheckedChange={setShowSourceOnly}
+          checked={excludeRepo}
+          onCheckedChange={setExcludeRepo}
         />
         <Label htmlFor="source-only">
-          Show only repositories you created (exclude forks)
+          exclude forks and completed projects
         </Label>
       </motion.div>
 
@@ -408,8 +417,8 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
                   (new Date().getTime() - new Date(repo.updated_at).getTime()) /
                     (1000 * 60 * 60 * 24),
                 )}
-                // TODO: Get progress from backend or make it editable
                 progress={repo.progress || 0}
+                onProgressUpdate={handleProgressUpdate}
               />
             ))}
           </AnimatePresence>

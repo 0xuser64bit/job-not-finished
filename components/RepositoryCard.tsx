@@ -44,6 +44,7 @@ interface RepositoryCardProps {
   lastActivity?: number;
   project_reminder?: boolean;
   progress?: number;
+  onProgressUpdate?: (repoId: number, newProgress: number) => void;
 }
 
 // Language color mapping
@@ -94,6 +95,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
   lastActivity,
   project_reminder,
   progress,
+  onProgressUpdate,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -130,6 +132,11 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
       });
       // Update the local state to reflect the new progress value
       setCurrentProgress(progressValue);
+      
+      // Call the parent callback to update the repositories array
+      if (onProgressUpdate) {
+        onProgressUpdate(repo_id, progressValue || 0);
+      }
     } catch (error) {
       console.error("Failed to update progress:", error);
     } finally {
@@ -148,6 +155,12 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ 
+        opacity: 0, 
+        scale: progressValue === 100 ? 0.8 : 1,
+        y: progressValue === 100 ? -30 : 0,
+        transition: { duration: 0.5 }
+      }}
       transition={{
         type: "spring",
         stiffness: 100,
@@ -159,7 +172,7 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
         transition: { duration: 0.2 },
       }}
     >
-      <Card className="h-full overflow-hidden border-2 bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-all duration-300">
+      <Card className={`h-full overflow-hidden border-2 bg-card/50 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 ${progressValue === 100 ? 'border-green-500 bg-green-50/10' : ''}`}>
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
             <CardTitle className="text-xl font-bold truncate">{name}</CardTitle>
