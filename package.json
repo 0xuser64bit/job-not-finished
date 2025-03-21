@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@auth/core": "^0.38.0",
@@ -32,6 +33,7 @@
     "prisma": "^6.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "resend": "^4.1.2",
     "shadcn-ui": "^0.9.5",
     "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.2",

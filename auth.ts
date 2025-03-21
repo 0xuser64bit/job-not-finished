@@ -56,10 +56,10 @@ export const {
         // Create or update user record
         await prisma.user.upsert({
           where: { githubId: profile.login },
-          update: { githubId: profile.login },
+          update: { email: user.email },
           create: {
             githubId: profile.login,
-            email: null,
+            email: user.email || null,
           },
         });
       }

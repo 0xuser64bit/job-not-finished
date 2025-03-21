@@ -4,18 +4,27 @@ import { NextResponse } from "next/server";
 import { getUser } from "./app/actions/get-user";
 import { auth } from "./auth";
 
+// Secret key for cron job access
+const CRON_SECRET = process.env.CRON_SECRET;
+
 export default auth(async (req) => {
   // req.auth contains the user's session
   // This middleware is called for all routes
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
+  // Check if this is the cron job endpoint with valid secret
+  const isCronEndpoint = 
+    nextUrl.pathname === "/api/reminder/sendEmail" && 
+    nextUrl.searchParams.get("secret") === CRON_SECRET;
+
   // Public routes accessible to all users
   const isPublicRoute =
     nextUrl.pathname === "/" ||
     nextUrl.pathname === "/signin" ||
     nextUrl.pathname.startsWith("/api/auth") ||
-    nextUrl.pathname === "/collect-email";
+    nextUrl.pathname === "/collect-email" ||
+    isCronEndpoint;
 
   // If trying to access a protected route while not logged in
   if (!isPublicRoute && !isLoggedIn) {
