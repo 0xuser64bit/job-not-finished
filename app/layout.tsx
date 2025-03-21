@@ -15,7 +15,20 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Job Not Finished",
-  description: "A task management application for unfinished projects",
+  description: "A Wake up call for unfinished projects",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://job-not-finished.vercel.app/",
+    images: [
+      {
+        url: "https://raw.githubusercontent.com/user-64bit/job-not-finished/refs/heads/main/public/image.png",
+        width: 1200,
+        height: 630,
+        alt: "Job Not Finished",
+      },
+    ],
+  },
 };
 
 export default async function RootLayout({

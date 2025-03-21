@@ -60,7 +60,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         repo.id === repoId ? { ...repo, progress: newProgress } : repo,
       ),
     );
-    if (newProgress === 100){
+    if (newProgress === 100) {
       setTotalUnCompletedProjects((prev) => (parseInt(prev) + 1).toString());
     }
   };
@@ -95,8 +95,11 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         });
         setRepositories(repos);
         setTotalUnCompletedProjects(() => {
-          return repos.filter((repo) => repo.progress !== 100).length.toString();
-        });        if (repos.length === 0) {
+          return repos
+            .filter((repo) => repo.progress !== 100)
+            .length.toString();
+        });
+        if (repos.length === 0) {
           setError(
             "No repositories found. Make sure your GitHub token is set correctly in .env.local",
           );
@@ -303,8 +306,8 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         >
           <AlertCircle size={16} className="text-amber-500" />
           <span className="text-sm text-muted-foreground">
-            You have {totalUnCompletedProjects} unfinished projects, but how many will you actually
-            finish?
+            You have {totalUnCompletedProjects} unfinished projects, but how
+            many will you actually finish?
           </span>
         </motion.div>
       </motion.div>
