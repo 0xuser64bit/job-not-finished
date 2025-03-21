@@ -37,6 +37,7 @@ A modern web application designed to help developers track and manage their unfi
 
 Visit the live demo at [JOB-NOT-FINISHED](https://job-not-finished.vercel.app/)
 
+![Dashboard](/public/demo.png)
 ## 🏁 Getting Started
 
 ### Prerequisites

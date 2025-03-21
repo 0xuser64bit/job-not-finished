@@ -65,6 +65,7 @@ function extractGitHubInfo(fullName: string): GitHubRepo | null {
 }
 
 // Function to generate a roast for a GitHub project based on its stats
+// TODO: use AI to generate dynamic roast accordin to project activity
 async function generateProjectRoast(repo: GitHubRepo): Promise<ProjectRoast> {
     try {
         console.log(`[Cron Job] Analyzing GitHub repo: ${repo.owner}/${repo.name}`);
