@@ -1,50 +1,17 @@
 "use client";
 import { UpdateRepositoriesAction } from "@/app/actions/update-repositories";
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
+import { RepNotFoundError } from "@/components/dashboard/rep-not-found";
+import { RepoSearializer } from "@/components/dashboard/repo-searializer";
 import RepositoryCard from "@/components/RepositoryCard";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import LoadingAnimation from "@/components/ui/loading-animation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Repository } from "@/lib/github";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  AlertCircle,
-  ArrowUpDown,
-  Filter,
-  Github,
-  LogOut,
-  Menu,
-  Moon,
-  RefreshCw,
-  Search,
-  Sun,
-} from "lucide-react";
-import { signOut } from "next-auth/react";
+import { AlertCircle, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface DashboardClientProps {
@@ -204,109 +171,17 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
   }
 
   if (error && repositories.length !== 0) {
-    return (
-      <div className="p-8 flex flex-col justify-center items-center min-h-[80vh]">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="max-w-2xl w-full"
-        >
-          <Card className="border-red-200 bg-red-50/50 dark:bg-red-950/10">
-            <CardHeader>
-              <CardTitle className="text-red-600 flex items-center gap-2">
-                <Github size={24} />
-                GitHub Connection Error
-              </CardTitle>
-              <CardDescription className="text-red-500">
-                {error}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-md border border-yellow-200 dark:border-yellow-800">
-                <h3 className="font-semibold mb-2 text-amber-700 dark:text-amber-400">
-                  Troubleshooting:
-                </h3>
-                <ol className="list-decimal pl-5 space-y-2 text-amber-800 dark:text-amber-300">
-                  <li>
-                    Create a GitHub Personal Access Token at{" "}
-                    <a
-                      href="https://github.com/settings/tokens"
-                      className="text-blue-500 underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      github.com/settings/tokens
-                    </a>
-                  </li>
-                  <li>
-                    Add the token to your{" "}
-                    <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">
-                      .env.local
-                    </code>{" "}
-                    file as{" "}
-                    <code className="bg-gray-100 dark:bg-gray-700 px-1 rounded">
-                      NEXT_PUBLIC_GITHUB_ACCESS_TOKEN=your_token
-                    </code>
-                  </li>
-                  <li>Restart your development server</li>
-                </ol>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-    );
+    return <RepNotFoundError error={error} />;
   }
 
   return (
     <div className="container mx-auto py-8 px-4 relative">
-      <div className="absolute top-4 right-0 z-10 flex items-center gap-4">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={refreshRepositories}
-          disabled={isRefreshing}
-          className="rounded-full"
-        >
-          <RefreshCw
-            className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
-          />
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-full">
-              <Menu className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem className="flex items-center justify-between cursor-pointer">
-              <div className="flex items-center gap-2">
-                <Sun className="h-4 w-4" />
-              </div>
-              <Switch
-                checked={theme === "dark"}
-                onCheckedChange={(checked) =>
-                  setTheme(checked ? "dark" : "light")
-                }
-              />
-              <div className="flex items-center gap-2">
-                <Moon className="h-4 w-4" />
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => signOut({ callbackUrl: "/" })}
-              className="cursor-pointer"
-            >
-              <div className="flex items-center gap-2 text-red-500">
-                <LogOut className="h-4 w-4 mr-1" />
-                <span>Logout</span>
-              </div>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <DashboardHeader
+        refreshRepositories={refreshRepositories}
+        isRefreshing={isRefreshing}
+        theme={theme || "dark"}
+        setTheme={setTheme}
+      />
 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -359,77 +234,17 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
         </motion.div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
-      >
-        <div className="relative">
-          <Search
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-            size={18}
-          />
-          <Input
-            placeholder="Search repositories..."
-            value={searchTerm}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchTerm(e.target.value)
-            }
-            className="pl-10"
-          />
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Filter size={18} className="text-muted-foreground" />
-          <Select value={languageFilter} onValueChange={setLanguageFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder="Filter by language" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Languages</SelectItem>
-              {languages.map((language) => (
-                <SelectItem key={language} value={language}>
-                  {language}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <ArrowUpDown size={18} className="text-muted-foreground" />
-          <Select value={sortOption} onValueChange={setSortOption}>
-            <SelectTrigger>
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="name">Name</SelectItem>
-              <SelectItem value="stars">Stars</SelectItem>
-              <SelectItem value="forks">Forks</SelectItem>
-              <SelectItem value="updated">Last Updated</SelectItem>
-              <SelectItem value="progress">Progress</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </motion.div>
-
-      {/* Source Only Filter */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-        className="flex items-center space-x-2 mb-6"
-      >
-        <Switch
-          id="source-only"
-          checked={excludeRepo}
-          onCheckedChange={setExcludeRepo}
-        />
-        <Label htmlFor="source-only">
-          exclude forks and completed projects
-        </Label>
-      </motion.div>
+      <RepoSearializer
+        setSearchTerm={setSearchTerm}
+        searchTerm={searchTerm}
+        setLanguageFilter={setLanguageFilter}
+        languageFilter={languageFilter}
+        setSortOption={setSortOption}
+        sortOption={sortOption}
+        setExcludeRepo={setExcludeRepo}
+        excludeRepo={excludeRepo}
+        languages={languages}
+      />
 
       {paginatedRepos.length === 0 ? (
         <motion.div
@@ -493,20 +308,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
           disabled={currentPage === 1}
           className="flex items-center gap-2"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="lucide lucide-chevron-left"
-          >
-            <path d="m15 18-6-6 6-6" />
-          </svg>
+          <ChevronLeft className="h-4 w-4" />
           Previous
         </Button>
 
@@ -535,20 +337,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
           className="flex items-center gap-2"
         >
           Next
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="lucide lucide-chevron-right"
-          >
-            <path d="m9 18 6-6-6-6" />
-          </svg>
+          <ChevronRight className="h-4 w-4" />
         </Button>
       </motion.div>
     </div>
