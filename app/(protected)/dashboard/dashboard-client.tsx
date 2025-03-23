@@ -9,6 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoadingAnimation from "@/components/ui/loading-animation";
@@ -20,7 +27,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Repository } from "@/lib/github";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -28,9 +34,15 @@ import {
   ArrowUpDown,
   Filter,
   Github,
+  LogOut,
+  Menu,
+  Moon,
   RefreshCw,
   Search,
+  Sun,
 } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -50,6 +62,7 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
   const [error, setError] = useState<string | null>(null);
   const [excludeRepo, setExcludeRepo] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   const itemsPerPage = 9;
 
@@ -260,7 +273,39 @@ const DashboardClient = ({ username }: DashboardClientProps) => {
             className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
           />
         </Button>
-        <ThemeToggle />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon" className="rounded-full">
+              <Menu className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem className="flex items-center justify-between cursor-pointer">
+              <div className="flex items-center gap-2">
+                <Sun className="h-4 w-4" />
+              </div>
+              <Switch
+                checked={theme === "dark"}
+                onCheckedChange={(checked) =>
+                  setTheme(checked ? "dark" : "light")
+                }
+              />
+              <div className="flex items-center gap-2">
+                <Moon className="h-4 w-4" />
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="cursor-pointer"
+            >
+              <div className="flex items-center gap-2 text-red-500">
+                <LogOut className="h-4 w-4 mr-1" />
+                <span>Logout</span>
+              </div>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <motion.div
