@@ -6,10 +6,12 @@
 // such tables (P3018) and they have since been removed, the failed attempt
 // stays on record and blocks every later deploy (P3009), so mark it rolled
 // back and let v1's init run again. Safe to run on every deploy: a fresh or
-// already-upgraded database is left alone. Every decision is logged (names
-// only, never data) so a deploy log shows what it saw.
+// already-upgraded database is left alone, and one holding another app's
+// migrations is refused outright. Every decision is logged (names only, never
+// data) so a deploy log shows what it saw.
 import "dotenv/config";
 import { execFileSync } from "node:child_process";
+import { readdirSync } from "node:fs";
 import pg from "pg";
 
 const V1_INIT = "20250318155718_init";
@@ -62,6 +64,18 @@ log(`history: ${history.map((m) => `${m.name} (${state(m)})`).join(", ") || "non
 log(
   `v1 tables: "User" ${found.user ? "present" : "absent"}, "Project" ${found.project ? "present" : "absent"}`,
 );
+
+// Another app's history means another app's database: its tables collide with
+// ours, and our failed attempt would block that app's own deploys (P3009).
+const ours = readdirSync(new URL("../prisma/migrations/", import.meta.url), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name);
+const foreign = history.map((m) => m.name).filter((name) => !ours.includes(name));
+if (foreign.length) {
+  log(`migrations from another app: ${foreign.join(", ")}. Give this app a database of its own.`);
+  await client.end();
+  process.exit(1);
+}
 
 let toRecord = [];
 let toRetry = [];
