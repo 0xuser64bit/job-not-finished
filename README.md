@@ -75,7 +75,7 @@ Copy the client ID and generate a client secret into `.env`.
 | Variable | Required | Notes |
 | --- | --- | --- |
 | `DATABASE_URL` | yes | Postgres connection string. Use the pooled URL if your provider has one. |
-| `DIRECT_URL` | no | Direct (non-pooled) URL for migrations. Falls back to `DATABASE_URL`. |
+| `DIRECT_URL` | no | Direct (non-pooled) URL for migrations. Vercel's Neon integration sets `DATABASE_URL_UNPOOLED` instead, which takes precedence. Falls back to `DATABASE_URL`. |
 | `BETTER_AUTH_SECRET` | yes | 32+ random characters: `openssl rand -base64 32`. Also signs unsubscribe links, so rotating it invalidates old ones. |
 | `APP_URL` | yes, except on Vercel | Public origin of the deployment. On Vercel it defaults to the production domain. |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | yes | From the OAuth app above. |
