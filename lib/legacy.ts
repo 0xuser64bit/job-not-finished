@@ -35,7 +35,9 @@ export async function claimLegacy(userId: string, githubLogin: string) {
   const moves = legacy.projects.flatMap((row) => {
     const data = fromLegacy(row, now);
     // v1 project ids are GitHub repo ids. Only touch rows nobody has changed in v2.
-    return data ? [db.project.updateMany({ where: { userId, repoId: row.id, status: "IDLE" }, data })] : [];
+    return data
+      ? [db.project.updateMany({ where: { userId, repoId: row.id, status: "IDLE" }, data })]
+      : [];
   });
   await db.$transaction([
     ...moves,

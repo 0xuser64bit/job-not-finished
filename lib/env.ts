@@ -3,9 +3,7 @@ import { z } from "zod";
 
 const schema = z.object({
   DATABASE_URL: z.url(),
-  BETTER_AUTH_SECRET: z
-    .string()
-    .min(32, "BETTER_AUTH_SECRET must be at least 32 characters"),
+  BETTER_AUTH_SECRET: z.string().min(32, "BETTER_AUTH_SECRET must be at least 32 characters"),
   /** Public origin, e.g. https://jobnotfinished.dev. Optional on Vercel. */
   APP_URL: z.url().optional(),
   GITHUB_CLIENT_ID: z.string().min(1),

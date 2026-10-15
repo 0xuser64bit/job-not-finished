@@ -37,7 +37,14 @@ describe("tally", () => {
       ],
       now,
     );
-    expect(t).toMatchObject({ repos: 4, shelf: 2, overdue: 1, returned: 1, unfinished: 3, dormant: 2 });
+    expect(t).toMatchObject({
+      repos: 4,
+      shelf: 2,
+      overdue: 1,
+      returned: 1,
+      unfinished: 3,
+      dormant: 2,
+    });
   });
 });
 

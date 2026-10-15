@@ -1,5 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { diffRepos, fetchOwnedPublicRepos, GitHubError, toRepo, type StoredRepo } from "@/lib/github";
+import {
+  diffRepos,
+  fetchOwnedPublicRepos,
+  GitHubError,
+  toRepo,
+  type StoredRepo,
+} from "@/lib/github";
 import { fromLegacy } from "@/lib/legacy";
 
 const payload = (id: number, extra: object = {}) => ({
@@ -74,21 +80,43 @@ describe("fetchOwnedPublicRepos", () => {
   it("reports rate limits with a retry hint instead of returning partial data", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => new Response("{}", { status: 403, headers: { "x-ratelimit-remaining": "0", "retry-after": "42" } })),
+      vi.fn(
+        async () =>
+          new Response("{}", {
+            status: 403,
+            headers: { "x-ratelimit-remaining": "0", "retry-after": "42" },
+          }),
+      ),
     );
-    await expect(fetchOwnedPublicRepos("token")).rejects.toMatchObject({ status: 429, retryAfter: 42 });
+    await expect(fetchOwnedPublicRepos("token")).rejects.toMatchObject({
+      status: 429,
+      retryAfter: 42,
+    });
     await expect(fetchOwnedPublicRepos("token")).rejects.toBeInstanceOf(GitHubError);
   });
 });
 
 describe("fromLegacy", () => {
   const now = new Date("2026-10-15T00:00:00Z");
-  const row = { progress: 0, reminder: false, createdAt: new Date("2025-03-18"), updatedAt: new Date("2025-04-01") };
+  const row = {
+    progress: 0,
+    reminder: false,
+    createdAt: new Date("2025-03-18"),
+    updatedAt: new Date("2025-04-01"),
+  };
 
   it("maps v1 progress and reminders onto the lifecycle", () => {
-    expect(fromLegacy({ ...row, progress: 100 }, now)).toMatchObject({ status: "SHIPPED", progress: 100 });
-    expect(fromLegacy({ ...row, reminder: true }, now)).toMatchObject({ status: "ACTIVE", progress: 0 });
-    expect(fromLegacy({ ...row, progress: 40 }, now)?.dueAt?.toISOString()).toBe("2026-11-14T00:00:00.000Z");
+    expect(fromLegacy({ ...row, progress: 100 }, now)).toMatchObject({
+      status: "SHIPPED",
+      progress: 100,
+    });
+    expect(fromLegacy({ ...row, reminder: true }, now)).toMatchObject({
+      status: "ACTIVE",
+      progress: 0,
+    });
+    expect(fromLegacy({ ...row, progress: 40 }, now)?.dueAt?.toISOString()).toBe(
+      "2026-11-14T00:00:00.000Z",
+    );
     expect(fromLegacy(row, now)).toBeNull();
   });
 });

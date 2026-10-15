@@ -129,7 +129,8 @@ export function diffRepos(stored: StoredRepo[], fetched: Repo[]) {
     }
     unseen.delete(repo.repoId);
     const changed = MIRRORED.filter((f) => !same(row[f], repo[f]));
-    if (changed.length) update.push({ id: row.id, data: Object.fromEntries(changed.map((f) => [f, repo[f]])) });
+    if (changed.length)
+      update.push({ id: row.id, data: Object.fromEntries(changed.map((f) => [f, repo[f]])) });
   }
   return { create, update, remove: [...unseen.values()].map((r) => r.id) };
 }
@@ -138,8 +139,7 @@ export const mirroredSelect = Object.fromEntries(
   ["id", "repoId", ...MIRRORED].map((f) => [f, true]),
 ) as Record<keyof StoredRepo, true>;
 
-export const fetchViewer = (token: string) =>
-  gh<{ id: number; login: string }>("/user", token);
+export const fetchViewer = (token: string) => gh<{ id: number; login: string }>("/user", token);
 
 /** Every public repo the token's user owns. Throws rather than returning a partial list. */
 export async function fetchOwnedPublicRepos(token: string): Promise<Repo[]> {

@@ -43,14 +43,17 @@ const LINES = {
     () => `Withdrawn. Better a clean burial than a haunting.`,
   ],
   renewed: [
-    (c) => `Renewed ${plural(c.renewals, "time")}. At this point it's not a loan, it's a lifestyle.`,
+    (c) =>
+      `Renewed ${plural(c.renewals, "time")}. At this point it's not a loan, it's a lifestyle.`,
     (c) => `${plural(c.renewals, "renewal")}. The library is starting to talk.`,
   ],
   overdue: [
     (c) => `${plural(c.overdue, "day")} overdue. You set this deadline yourself, by the way.`,
     (c) => `Past due by ${plural(c.overdue, "day")}. Late fees are payable in shame.`,
-    (c) => `${c.name} was due ${plural(c.overdue, "day")} ago. A strongly worded letter is being drafted.`,
-    (c) => `Overdue by ${plural(c.overdue, "day")}. Renew it, return it, or withdraw it. Silence isn't an option.`,
+    (c) =>
+      `${c.name} was due ${plural(c.overdue, "day")} ago. A strongly worded letter is being drafted.`,
+    (c) =>
+      `Overdue by ${plural(c.overdue, "day")}. Renew it, return it, or withdraw it. Silence isn't an option.`,
   ],
   almost: [
     (c) => `${c.progress}% done. The last 10% is the other 90%. Finish it.`,
@@ -59,14 +62,16 @@ const LINES = {
   ],
   bugs: [
     // v1
-    (c) => `${c.issues} open issues and no commits in ${c.ago}. You're collecting bugs like trading cards.`,
+    (c) =>
+      `${c.issues} open issues and no commits in ${c.ago}. You're collecting bugs like trading cards.`,
   ],
   never: [
     () => `Created, never pushed. A library card with no books on it.`,
     () => `An empty repo with big dreams. Push one commit. Just one.`,
   ],
   fresh: [
-    (c) => `Pushed ${c.ago === "today" ? "today" : `${c.ago} ago`}. Returning books on time? Who are you?`,
+    (c) =>
+      `Pushed ${c.ago === "today" ? "today" : `${c.ago} ago`}. Returning books on time? Who are you?`,
     (c) => `Fresh commits on ${c.name}. The librarian is suspicious but impressed.`,
     () => `You're on a roll. Don't let this become next month's overdue notice.`,
     // v1
@@ -103,7 +108,8 @@ const LINES = {
     (c) => `${c.ago}. Return it or admit it's lost.`,
   ],
   ancient: [
-    (c) => `Over ${plural(c.years, "year")} without a push. This isn't overdue, it's a historical artifact.`,
+    (c) =>
+      `Over ${plural(c.years, "year")} without a push. This isn't overdue, it's a historical artifact.`,
     () => `Untouched for over a year. The framework you picked has been deprecated twice since.`,
     (c) => `${c.name} predates several of your current hobbies. Return it or withdraw it.`,
   ],
