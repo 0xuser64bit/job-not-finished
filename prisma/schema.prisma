@@ -1,37 +1,171 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
 }
-        
+
+// ─── Auth (shape required by Better Auth) ───────────────────────────────────
+
 model User {
-  id        String    @id @default(cuid())
-  email     String?   @unique
-  githubId  String    @unique
-  projects  Project[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+
+  // App fields. Better Auth never writes these; lib/sync.ts and settings do.
+  githubLogin   String?   @unique
+  syncedAt      DateTime?
+  onboardedAt   DateTime?
+  /// Weekly roast emails. Off after an unsubscribe.
+  digestEnabled Boolean   @default(true)
+  /// Verified override for the digest address; null means `email`.
+  digestEmail   String?
+  /// Set after each digest send; makes the weekly cron idempotent.
+  lastDigestAt  DateTime?
+  publicProfile Boolean   @default(false)
+
+  sessions Session[]
+  accounts Account[]
+  projects Project[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
+}
+
+// ─── Projects ───────────────────────────────────────────────────────────────
+
+enum ProjectStatus {
+  /// Synced from GitHub, no commitment yet.
+  IDLE
+  /// Committed to finishing. Roasted weekly.
+  ACTIVE
+  SHIPPED
+  /// Let go on purpose.
+  BURIED
 }
 
 model Project {
-  id        String   @id
-  name      String
-  progress  Int      @default(0) // 0-100
-  userId    String
-  reminder  Boolean? @default(false)
-  user      User     @relation(fields: [userId], references: [githubId])
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Mirrored from GitHub on every sync.
+  repoId        String
+  name          String
+  fullName      String
+  description   String?
+  language      String?
+  htmlUrl       String
+  homepage      String?
+  stars         Int       @default(0)
+  forks         Int       @default(0)
+  openIssues    Int       @default(0)
+  isFork        Boolean   @default(false)
+  isArchived    Boolean   @default(false)
+  repoCreatedAt DateTime
+  /// Last push to any branch; null for an empty repository.
+  pushedAt      DateTime?
+
+  // Owned by the user. Progress has a 0-100 CHECK constraint in the migration.
+  status      ProjectStatus @default(IDLE)
+  progress    Int           @default(0)
+  /// When it was last checked out (status became ACTIVE).
+  activatedAt DateTime?
+  /// Self-imposed ship-by date; past it, the project is overdue.
+  dueAt       DateTime?
+  renewals    Int           @default(0)
+  shippedAt   DateTime?
+  buriedAt    DateTime?
+  epitaph     String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([userId, repoId])
+  @@index([userId, status])
+  @@index([status])
+  @@map("projects")
+}
+
+// ─── Pre-2.0 data ───────────────────────────────────────────────────────────
+
+/// Tables from v1 (NextAuth), renamed rather than dropped so nobody's progress
+/// is lost. lib/legacy.ts moves a user's rows into `projects` on their first
+/// sync and deletes them. Drop both models once they are empty in production.
+model LegacyUser {
+  id        String          @id
+  email     String?         @unique
+  githubId  String          @unique
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  projects  LegacyProject[]
+
+  @@map("legacy_users")
+}
+
+model LegacyProject {
+  id        String     @id
+  name      String
+  progress  Int        @default(0)
+  userId    String
+  reminder  Boolean?   @default(false)
+  user      LegacyUser @relation(fields: [userId], references: [githubId])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
   @@index([userId])
+  @@map("legacy_projects")
 }

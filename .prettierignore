@@ -1,9 +1,6 @@
-
-build
-node_modules
 .next
-.env
-.env.local
-.env.development.local
-.env.test.local
+node_modules
+lib/generated
+bun.lock
+prisma/migrations
 *.md
