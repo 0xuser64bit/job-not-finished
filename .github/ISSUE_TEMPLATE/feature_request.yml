@@ -1,0 +1,11 @@
+name: Idea
+description: Suggest a feature or a new roast line.
+labels: [idea]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What should change, and what would it help you finish?
+    validations:
+      required: true

@@ -1,265 +1,140 @@
-# Job Not Finished
+<p align="center">
+  <img src="docs/landing.webp" alt="Job Not Finished: a date-due slip stamped OVERDUE next to the headline 'Your side projects are overdue.'" width="100%">
+</p>
 
-![Job Not Finished Logo](/public/image.png)
+<h1 align="center">Job Not Finished</h1>
 
-A modern web application designed to help developers track and manage their unfinished GitHub projects. Built with Next.js 15, this application integrates with the GitHub API to display your repositories and helps you stay motivated to complete your projects through friendly reminders and progress tracking.
+<p align="center">
+  <strong>Your side projects are overdue.</strong><br>
+  Accountability for unfinished GitHub projects, delivered as a weekly roast built from your real commit history.
+</p>
 
-## 🌟 Features
-
-- **GitHub Integration**: Connect with your GitHub account to view and manage your repositories
-- **Project Progress Tracking**: Track completion status of your projects with a visual progress bar
-- **Repository Filtering**: Filter repositories by language, search by name, and sort by various criteria
-- **Email Reminders**: Receive weekly email reminders for your unfinished projects with motivational roasts
-- **Responsive Design**: Beautiful UI that works on desktop and mobile devices
-- **Dark/Light Mode**: Toggle between dark and light themes
-- **Protected Routes**: Secure authentication with NextAuth.js
-- **Modern UI**: Built with Tailwind CSS and shadcn/ui components
-- **Animations**: Smooth animations powered by Framer Motion
-
-## 📋 Table of Contents
-
-- [Demo](#-demo)
-- [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Environment Setup](#environment-setup)
-- [Usage](#-usage)
-  - [Authentication](#authentication)
-  - [Dashboard](#dashboard)
-  - [Project Reminders](#project-reminders)
-- [Project Structure](#-project-structure)
-- [Technologies](#-technologies)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Acknowledgements](#-acknowledgements)
-
-## 🚀 Demo
-
-Visit the live demo at [JOB-NOT-FINISHED](https://job-not-finished.vercel.app/)
-
-![Dashboard](/public/demo.png)
-## 🏁 Getting Started
-
-### Prerequisites
-
-- Node.js 18+ or Bun
-- GitHub account (for OAuth setup and API access)
-- PostgreSQL database
-- Git
-
-### Installation
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/yourusername/job-not-finished.git
-cd job-not-finished
-```
-
-2. Install dependencies:
-
-```bash
-# Using Bun (recommended for faster installation)
-bun install
-
-# Or using npm
-npm install
-```
-
-### Environment Setup
-
-1. Create a `.env.local` file in the root directory with the following variables:
-
-```
-# Auth
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-nextauth-secret-key-change-this-in-production
-
-# GitHub OAuth
-GITHUB_CLIENT_ID=your-github-client-id
-GITHUB_CLIENT_SECRET=your-github-client-secret
-
-# GitHub API (for higher rate limits)
-GITHUB_TOKEN=your-github-personal-access-token
-
-# Database
-DATABASE_URL=your-postgresql-connection-string
-DIRECT_URL=your-postgresql-direct-connection-string
-
-# Email Service (Resend)
-RESEND_API_KEY=your-resend-api-key
-
-# Cron Job Secret
-CRON_SECRET=your-cron-secret-key
-```
-
-2. Set up GitHub OAuth:
-   - Go to your GitHub account settings
-   - Navigate to "Developer settings" > "OAuth Apps" > "New OAuth App"
-   - Fill in the application details:
-     - Application name: Job Not Finished
-     - Homepage URL: http://localhost:3000
-     - Authorization callback URL: http://localhost:3000/api/auth/callback/github
-   - Register the application
-   - Copy the Client ID and generate a new Client Secret
-   - Add these values to your `.env.local` file
-
-3. Create a GitHub Personal Access Token:
-   - Go to GitHub Settings > Developer Settings > Personal Access Tokens > Fine-grained tokens
-   - Generate a new token with the following permissions:
-     - `public_repo` - to access public repositories
-     - `read:user` - to read user profile information
-   - Add this token to your `.env.local` file as `GITHUB_TOKEN`
-
-4. Set up a PostgreSQL database and add the connection strings to your `.env.local` file
-
-5. Set up Resend for email functionality:
-   - Create an account at [resend.com](https://resend.com)
-   - Create an API key and add it to your `.env.local` file as `RESEND_API_KEY`
-
-6. Generate a secure random string for `NEXTAUTH_SECRET` and `CRON_SECRET`:
-
-```bash
-# Using OpenSSL
-openssl rand -base64 32
-
-# Or using Node.js
-node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
-```
-
-## 🖥️ Usage
-
-### Running the Development Server
-
-```bash
-# Using Bun
-bun dev
-
-# Or using npm
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
-
-### Building for Production
-
-```bash
-# Using Bun
-bun run build
-
-# Or using npm
-npm run build
-```
-
-### Authentication
-
-1. Visit the homepage and click "Sign In with GitHub"
-2. Authorize the application to access your GitHub account
-3. After successful authentication, you'll be prompted to provide your email address for reminders
-4. Once your email is provided, you'll be redirected to the dashboard
-
-### Dashboard
-
-The dashboard displays all your GitHub repositories with the following features:
-
-- **Search**: Filter repositories by name
-- **Language Filter**: View repositories of a specific programming language
-- **Sorting**: Sort repositories by name, stars, forks, last updated, or progress
-- **Source Filter**: Toggle to show only repositories you created (exclude forks)
-- **Progress Tracking**: Update the completion percentage of each project
-- **Reminders**: Enable or disable weekly email reminders for specific projects
-
-### Project Reminders
-
-The application includes a weekly email reminder system that:
-
-1. Sends emails to users with reminder-enabled projects
-2. Analyzes GitHub repository activity and generates motivational "roasts"
-3. Provides statistics about project activity, stars, and open issues
-4. Encourages users to continue working on their unfinished projects
-
-To set up the reminder system:
-
-1. Ensure the `RESEND_API_KEY` and `CRON_SECRET` are configured in your environment
-2. Set up a cron job to hit the reminder endpoint weekly:
-   ```
-   https://your-domain.com/api/reminder/sendEmail?secret=your-cron-secret-key
-   ```
-
-## 📂 Project Structure
-
-```
-job-not-finished/
-├── app/                      # Next.js App Router
-│   ├── (protected)/          # Protected routes requiring authentication
-│   │   └── dashboard/        # Dashboard page
-│   ├── actions/              # Server actions
-│   │   ├── get-user/         # User data retrieval
-│   │   ├── toggle-reminder/  # Toggle project reminders
-│   │   ├── update-progress/  # Update project progress
-│   │   └── update-repositories/ # Fetch GitHub repositories
-│   ├── api/                  # API routes
-│   │   ├── auth/             # Authentication API routes
-│   │   ├── reminder/         # Email reminder API
-│   │   └── user/             # User data API
-│   ├── collect-email/        # Email collection page
-│   ├── signin/               # Sign-in page
-│   ├── layout.tsx            # Root layout
-│   ├── page.tsx              # Home page
-│   └── providers.tsx         # Context providers
-├── components/               # React components
-│   ├── ui/                   # UI components (shadcn/ui)
-│   └── RepositoryCard.tsx    # Repository card component
-├── lib/                      # Utility functions and libraries
-│   ├── github.ts             # GitHub API integration
-│   ├── prisma.ts             # Prisma client initialization
-│   └── utils.ts              # Utility functions
-├── prisma/                   # Prisma ORM
-│   ├── migrations/           # Database migrations
-│   └── schema.prisma         # Database schema
-├── public/                   # Static assets
-├── auth.ts                   # NextAuth.js configuration
-├── middleware.ts             # Next.js middleware for route protection
-└── ...                       # Configuration files
-```
-
-## 🛠️ Technologies
-
-- **Framework**: [Next.js 15](https://nextjs.org/)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Authentication**: [NextAuth.js 5](https://next-auth.js.org/)
-- **Database**: [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM](https://www.prisma.io/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Email Service**: [Resend](https://resend.com/)
-- **GitHub API**: [Octokit](https://github.com/octokit/octokit.js)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Theme**: [next-themes](https://github.com/pacocoursey/next-themes)
-- **Toast Notifications**: [Sonner](https://sonner.emilkowal.ski/)
-- **Package Manager**: [Bun](https://bun.sh/) / [npm](https://www.npmjs.com/)
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgements
-
-- [Next.js](https://nextjs.org/) for the amazing React framework
-- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
-- [GitHub](https://github.com/) for the API that makes this project possible
-- [Vercel](https://vercel.com/) for hosting the application
+<p align="center">
+  <a href="https://job-not-finished.vercel.app">Use it free</a> ·
+  <a href="#self-hosting">Self-host it</a> ·
+  <a href="CONTRIBUTING.md">Contribute</a>
+</p>
 
 ---
 
-<p align="center">Made with ❤️ by Arth</p>
+Every developer has a graveyard of half-built repos. Job Not Finished treats each one like a library book you checked out and never returned. It reads your public GitHub repositories, keeps a date-due card for every project you commit to, and mails you an overdue notice every Sunday about the ones you've neglected, until you ship them or honestly let them go.
+
+No boards, no tickets, no streaks. One card per project, and five stamps.
+
+| Stamp | What it means |
+| --- | --- |
+| **Checked out** | You committed to finishing it. It gets a due date, 30 days out by default. |
+| **Overdue** | You missed your own date. Sunday's notice will mention it, with your real push history. |
+| **Renewed** | You asked for two more weeks. Every renewal is counted, and mentioned. |
+| **Returned** | You shipped it. Job finished. |
+| **Withdrawn** | You let it go on purpose, with an epitaph. Honest endings count too. |
+
+<p align="center">
+  <img src="docs/dashboard.webp" alt="The catalog: a borrower's card with circulation tallies above catalog cards for each checked-out project, with stamps, due dates, progress, and roast notes." width="100%">
+</p>
+
+## Features
+
+- **Your real record.** Sign in with GitHub and see every public repo you own: how many are unfinished, and how many haven't been touched in 90 days.
+- **Catalog cards.** Each project shows its last push, stars, open issues, your progress, and its due date. Check out, renew, return, or withdraw it from the card.
+- **Roasts from facts.** Every card carries a note rewritten weekly from what GitHub says. It stings the project, never you, and gets meaner the longer a project sits.
+- **The Sunday notice.** One email a week about the projects you checked out, overdue first. One-click unsubscribe.
+- **A public record, if you want one.** Share `/u/<your-login>` with a generated preview card. Off by default.
+- **Leave any time.** Closing your card deletes everything and removes the app from your GitHub authorizations.
+
+## Permissions and privacy
+
+Sign-in asks GitHub for `read:user` and `user:email`, the narrowest scopes it offers. Job Not Finished can read your public repositories and profile. It cannot see private repositories and cannot write anything to GitHub. The access token is encrypted at rest, and every auth endpoint except the OAuth callback is disabled over HTTP, so the token never reaches a browser.
+
+There are no analytics, ads, or tracking cookies. The [privacy page](https://job-not-finished.vercel.app/privacy) lists exactly what is stored.
+
+## Self-hosting
+
+You need Node 20.19+ (or Bun 1.2+), Postgres 14+, and a GitHub account. Email is optional: without it, notices are printed to the server log.
+
+### 1. Install
+
+```bash
+git clone https://github.com/0xuser64bit/job-not-finished.git
+cd job-not-finished
+bun install
+cp .env.example .env
+```
+
+### 2. Create a GitHub OAuth app
+
+Go to **GitHub → Settings → Developer settings → OAuth Apps → New OAuth App**:
+
+- **Homepage URL:** your `APP_URL`, for example `http://localhost:3000`
+- **Authorization callback URL:** `APP_URL/api/auth/callback/github`
+
+Copy the client ID and generate a client secret into `.env`.
+
+### 3. Configure
+
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `DATABASE_URL` | yes | Postgres connection string. Use the pooled URL if your provider has one. |
+| `DIRECT_URL` | no | Direct (non-pooled) URL for migrations. Falls back to `DATABASE_URL`. |
+| `BETTER_AUTH_SECRET` | yes | 32+ random characters: `openssl rand -base64 32`. Also signs unsubscribe links, so rotating it invalidates old ones. |
+| `APP_URL` | yes, except on Vercel | Public origin of the deployment. On Vercel it defaults to the production domain. |
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | yes | From the OAuth app above. |
+| `RESEND_API_KEY` | no | Sends real email through [Resend](https://resend.com). |
+| `EMAIL_FROM` | with Resend | A sender on a domain verified in Resend, e.g. `Job Not Finished <notices@example.com>`. |
+| `CRON_SECRET` | for notices | 16+ random characters. The digest endpoint requires it as a Bearer token. |
+
+### 4. Migrate and run
+
+```bash
+bun run db:deploy
+bun run dev
+```
+
+Open http://localhost:3000 and sign in.
+
+### Deploying to Vercel
+
+Import the repository, set the variables above, and deploy. The `vercel-build` script applies migrations before building, and `vercel.json` schedules the weekly notice for Sundays at 00:00 UTC. Vercel sends `CRON_SECRET` with each cron call automatically.
+
+### Running the weekly notice elsewhere
+
+Call the endpoint once a week from any scheduler:
+
+```bash
+curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://your-domain.com/api/cron/digest
+```
+
+It is safe to call repeatedly: each user gets at most one notice every six days. If a run hits its time budget, the response says `"done": false` and the next call picks up where it stopped.
+
+### Upgrading from v1
+
+The v2 migration renames the v1 `User` and `Project` tables to `legacy_users` and `legacy_projects` instead of dropping them. When a v1 user signs in again, their progress and reminders move onto their synced projects (reminders become checked-out loans) and their legacy rows are deleted. Once `legacy_users` is empty, the legacy models can be dropped.
+
+## Development
+
+```bash
+bun run dev         # Next.js dev server
+bun run check       # lint, typecheck, unit tests
+bun run build       # production build
+bun run db:migrate  # create a migration after editing prisma/schema.prisma
+bun run db:studio   # browse the database
+```
+
+The interesting parts live in `lib/`:
+
+- `lifecycle.ts`: the one state machine every project change goes through
+- `roast.ts`: the roast engine, deterministic per project per week
+- `sync.ts` and `github.ts`: mirroring public repos with the user's own token
+- `digest.ts` and `email/`: the weekly notice and its cron runner
+
+## Built with
+
+[Next.js 16](https://nextjs.org) · [React 19](https://react.dev) · [Better Auth](https://better-auth.com) · [Prisma 7](https://prisma.io) · [Tailwind CSS 4](https://tailwindcss.com) · [Resend](https://resend.com) · Postgres
+
+## Contributing
+
+Bug reports, roast lines, and pull requests are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues privately, as described in [SECURITY.md](SECURITY.md).
+
+## License
+
+[MIT](LICENSE). Run your own desk.
