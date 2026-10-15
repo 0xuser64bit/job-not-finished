@@ -94,7 +94,9 @@ Open http://localhost:3000 and sign in.
 
 ### Deploying to Vercel
 
-Import the repository, set the variables above, and deploy. The `vercel-build` script applies migrations before building, and `vercel.json` schedules the weekly notice for Sundays at 00:00 UTC. Vercel sends `CRON_SECRET` with each cron call automatically.
+Import the repository, set the variables above, and deploy. `vercel.json` pins the build command to `vercel-build`, which applies migrations on production deployments only (previews never migrate), and schedules the weekly notice for Sundays at 00:00 UTC. Vercel sends `CRON_SECRET` with each cron call automatically.
+
+For a hosted database, add `sslmode=require` to the connection URLs to encrypt the connection.
 
 ### Running the weekly notice elsewhere
 
@@ -107,6 +109,8 @@ curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://your-domain.com/api/cr
 It is safe to call repeatedly: each user gets at most one notice every six days. If a run hits its time budget, the response says `"done": false` and the next call picks up where it stopped.
 
 ### Upgrading from v1
+
+v1's variable names keep working: `NEXTAUTH_SECRET` (or `AUTH_SECRET`) is read as `BETTER_AUTH_SECRET`, and `NEXTAUTH_URL` as `APP_URL`. Back up the database first: the first production build runs the v2 migration. `GITHUB_TOKEN` and `NEXT_PUBLIC_GITHUB_ACCESS_TOKEN` are no longer used; delete them and revoke that token.
 
 The v2 migration renames the v1 `User` and `Project` tables to `legacy_users` and `legacy_projects` instead of dropping them. When a v1 user signs in again, their progress and reminders move onto their synced projects (reminders become checked-out loans) and their legacy rows are deleted. Once `legacy_users` is empty, the legacy models can be dropped.
 

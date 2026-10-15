@@ -49,3 +49,21 @@ describe("parseEnv", () => {
     ).not.toThrow();
   });
 });
+
+describe("withLibpqSsl", () => {
+  it("keeps libpq's meaning of sslmode, and leaves other URLs alone", async () => {
+    const { withLibpqSsl } = await import("@/lib/db");
+    expect(withLibpqSsl("postgresql://u:p@db.example.com:5432/app?sslmode=require")).toBe(
+      "postgresql://u:p@db.example.com:5432/app?sslmode=require&uselibpqcompat=true",
+    );
+    expect(withLibpqSsl("postgresql://u:p@h:6543/app?pgbouncer=true&sslmode=require")).toMatch(
+      /&uselibpqcompat=true$/,
+    );
+    const untouched = [
+      "postgresql://u:p@localhost:5432/app",
+      "postgresql://u:p@h:6543/app?pgbouncer=true",
+      "postgresql://u:p@h/app?sslmode=require&uselibpqcompat=true",
+    ];
+    for (const url of untouched) expect(withLibpqSsl(url)).toBe(url);
+  });
+});
