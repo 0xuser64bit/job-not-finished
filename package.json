@@ -19,10 +19,10 @@
     "format": "prettier --write .",
     "check": "bun run lint && bun run typecheck && bun run test",
     "db:migrate": "prisma migrate dev",
-    "db:deploy": "prisma migrate deploy",
+    "db:deploy": "node scripts/baseline-v1.mjs && prisma migrate deploy",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
-    "vercel-build": "([ \"$VERCEL_ENV\" != production ] || prisma migrate deploy) && next build"
+    "vercel-build": "([ \"$VERCEL_ENV\" != production ] || (node scripts/baseline-v1.mjs && prisma migrate deploy)) && next build"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.0",

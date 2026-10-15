@@ -114,6 +114,8 @@ v1's variable names keep working: `NEXTAUTH_SECRET` (or `AUTH_SECRET`) is read a
 
 The v2 migration renames the v1 `User` and `Project` tables to `legacy_users` and `legacy_projects` instead of dropping them. When a v1 user signs in again, their progress and reminders move onto their synced projects (reminders become checked-out loans) and their legacy rows are deleted. Once `legacy_users` is empty, the legacy models can be dropped.
 
+If you restored a v1 backup into a new database without Prisma's `_prisma_migrations` history, `bun run db:deploy` (and the Vercel production build) notices the v1 tables, records v1's migrations as already applied, and runs only the v2 upgrade.
+
 ## Development
 
 ```bash
