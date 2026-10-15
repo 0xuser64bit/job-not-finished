@@ -12,6 +12,17 @@ export type Email = {
 
 const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
 
+/** Why email can't go out, if it can't. Checked before any send. */
+export const emailMisconfigured =
+  resend && !env.EMAIL_FROM
+    ? "EMAIL_FROM is not set: use an address on a domain verified in Resend"
+    : null;
+
+function sender() {
+  if (emailMisconfigured) throw new Error(emailMisconfigured);
+  return env.EMAIL_FROM!;
+}
+
 function logInstead(email: Email) {
   // Development without Resend: show what would have gone out.
   console.info(`[email] to=${email.to} subject="${email.subject}"\n${email.text}\n`);
@@ -19,10 +30,7 @@ function logInstead(email: Email) {
 
 export async function sendEmail(email: Email, idempotencyKey?: string) {
   if (!resend) return logInstead(email);
-  const { error } = await resend.emails.send(
-    { from: env.EMAIL_FROM, ...email },
-    { idempotencyKey },
-  );
+  const { error } = await resend.emails.send({ from: sender(), ...email }, { idempotencyKey });
   if (error) throw new Error(`Resend: ${error.message}`);
 }
 
@@ -36,8 +44,9 @@ export async function sendBatch(emails: Email[], idempotencyKey?: string): Promi
     emails.forEach(logInstead);
     return new Set();
   }
+  const from = sender();
   const { data, error } = await resend.batch.send(
-    emails.map((e) => ({ from: env.EMAIL_FROM, ...e })),
+    emails.map((e) => ({ from, ...e })),
     { idempotencyKey, batchValidation: "permissive" },
   );
   if (error) throw new Error(`Resend batch: ${error.message}`);
