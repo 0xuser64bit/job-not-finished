@@ -2,9 +2,12 @@
 // "User" and "Project" tables exist, but nothing records the migrations that
 // made them, so `prisma migrate deploy` tries to create them again and fails.
 // When the v1 tables are present and not yet upgraded, record v1's migrations
-// as applied so that only the v2 upgrade runs. Safe to run on every deploy:
-// a fresh or already-upgraded database is left alone. Every decision is
-// logged (names only, never data) so a deploy log shows what it saw.
+// as applied so that only the v2 upgrade runs. If a deploy already tripped over
+// such tables (P3018) and they have since been removed, the failed attempt
+// stays on record and blocks every later deploy (P3009), so mark it rolled
+// back and let v1's init run again. Safe to run on every deploy: a fresh or
+// already-upgraded database is left alone. Every decision is logged (names
+// only, never data) so a deploy log shows what it saw.
 import "dotenv/config";
 import { execFileSync } from "node:child_process";
 import pg from "pg";
@@ -43,9 +46,32 @@ const columns = async (table) =>
     )
   ).rows.map((r) => r.name);
 
+const history = found.history
+  ? (
+      await client.query(
+        `select migration_name as name, finished_at is not null as finished,
+                rolled_back_at is not null as "rolledBack"
+           from _prisma_migrations`,
+      )
+    ).rows
+  : [];
+const state = (m) => (m.rolledBack ? "rolled back" : m.finished ? "applied" : "failed");
+const applied = history.filter((m) => state(m) === "applied").map((m) => m.name);
+const failed = history.filter((m) => state(m) === "failed").map((m) => m.name);
+log(`history: ${history.map((m) => `${m.name} (${state(m)})`).join(", ") || "none"}`);
+log(
+  `v1 tables: "User" ${found.user ? "present" : "absent"}, "Project" ${found.project ? "present" : "absent"}`,
+);
+
 let toRecord = [];
-if (!found.user || !found.project) {
-  log("no v1 tables; nothing to baseline");
+let toRetry = [];
+if (!found.user && !found.project) {
+  // Neither table it creates exists, so running it again can't collide with a
+  // restore. Anything else it left behind makes the rerun fail loudly (P3018).
+  if (failed.includes(V1_INIT)) toRetry = [V1_INIT];
+  else log("no v1 tables; nothing to baseline");
+} else if (!found.user || !found.project) {
+  log("only one v1 table exists, leaving it alone: restore the other or drop it");
 } else {
   const userColumns = await columns('"User"');
   const projectColumns = await columns('"Project"');
@@ -59,14 +85,6 @@ if (!found.user || !found.project) {
         `User: ${userColumns.join(", ")}. Project: ${projectColumns.join(", ")}.`,
     );
   } else {
-    const applied = found.history
-      ? (
-          await client.query(
-            `select migration_name from _prisma_migrations
-              where finished_at is not null and rolled_back_at is null`,
-          )
-        ).rows.map((r) => r.migration_name)
-      : [];
     toRecord = [V1_INIT, ...(projectColumns.includes("reminder") ? [V1_REMINDER] : [])].filter(
       (m) => !applied.includes(m),
     );
@@ -75,6 +93,10 @@ if (!found.user || !found.project) {
 }
 await client.end();
 
+for (const migration of toRetry) {
+  log(`no v1 tables, but ${migration} is recorded as failed; marking it rolled back to rerun it`);
+  execFileSync("prisma", ["migrate", "resolve", "--rolled-back", migration], { stdio: "inherit" });
+}
 for (const migration of toRecord) {
   log(`v1 tables found without history; recording ${migration} as applied`);
   // `resolve --applied` also clears an earlier failed attempt at the same migration.
