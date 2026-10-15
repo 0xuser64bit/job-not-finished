@@ -70,7 +70,6 @@ export default async function Image({ params }: { params: Promise<{ login: strin
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 28, marginTop: 26 }}>
           {user?.image && (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={user.image}
               alt=""

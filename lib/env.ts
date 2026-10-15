@@ -23,6 +23,14 @@ function load() {
     const issues = parsed.error.issues.map((i) => `  ${i.path.join(".")}: ${i.message}`);
     throw new Error(`Invalid environment variables (see .env.example):\n${issues.join("\n")}`);
   }
+  // Falling back to localhost in production would silently break OAuth callbacks and email links.
+  if (
+    process.env.NODE_ENV === "production" &&
+    !parsed.data.APP_URL &&
+    !process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ) {
+    throw new Error("APP_URL is required in production, e.g. APP_URL=https://your-domain.com");
+  }
   return parsed.data;
 }
 
