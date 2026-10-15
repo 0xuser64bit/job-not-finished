@@ -20,7 +20,9 @@ export default async function Image({ params }: { params: Promise<{ login: strin
     },
   });
 
-  const handle = `@${user?.githubLogin ?? login}`.toUpperCase();
+  // Never echo the URL: a missing or private record must not mint a branded card
+  // with arbitrary text on it.
+  const handle = user?.githubLogin ? `@${user.githubLogin}`.toUpperCase() : "JOB NOT FINISHED";
   const t = user ? tally(user.projects, new Date()) : null;
   const rows: [string, number][] = t
     ? [

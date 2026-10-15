@@ -22,14 +22,16 @@ export const deliverable = (address: string) =>
  * Stops when `outOfTime()` says so and reports what's left for the next run.
  */
 export async function runDigest(now: Date, outOfTime: () => boolean) {
-  const attempted: string[] = [];
+  // Walk users in id order so each run visits everyone at most once, however
+  // many fail; a growing NOT IN list would hit Postgres's parameter limit.
+  let cursor = "";
   const totals = { sent: 0, failed: 0, skipped: 0 };
   const week = Math.floor(now.getTime() / (7 * 86_400_000));
 
   while (!outOfTime()) {
     const users = await db.user.findMany({
       where: {
-        id: { notIn: attempted },
+        id: { gt: cursor },
         digestEnabled: true,
         OR: [{ lastDigestAt: null }, { lastDigestAt: { lt: addDays(now, -6) } }],
         projects: { some: { status: "ACTIVE" } },
@@ -39,7 +41,7 @@ export async function runDigest(now: Date, outOfTime: () => boolean) {
       take: PAGE,
     });
     if (!users.length) return { done: true, ...totals };
-    attempted.push(...users.map((u) => u.id));
+    cursor = users[users.length - 1].id;
 
     // Fresh facts make honest roasts. If GitHub is down, last week's facts still beat silence.
     for (let i = 0; i < users.length; i += SYNC_CONCURRENCY) {
