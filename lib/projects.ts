@@ -11,6 +11,31 @@ const DAY_MS = 86_400_000;
 
 export const addDays = (date: Date, days: number) => new Date(date.getTime() + days * DAY_MS);
 
+const stampFormat = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "2-digit",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+/** "OCT 15 2026", the way a library date stamp prints it. */
+export const stampDate = (d: Date) => stampFormat.format(d).replace(",", "").toUpperCase();
+
+const relative = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
+/** "just now", "3 minutes ago", "yesterday". */
+export function ago(then: Date, now: Date) {
+  const seconds = Math.round((then.getTime() - now.getTime()) / 1000);
+  if (seconds > -45) return "just now";
+  const units: [Intl.RelativeTimeFormatUnit, number][] = [
+    ["day", 86_400],
+    ["hour", 3600],
+    ["minute", 60],
+  ];
+  const [unit, size] = units.find(([, size]) => Math.abs(seconds) >= size) ?? units[2];
+  return relative.format(Math.round(seconds / size), unit);
+}
+
 /** Whole days from `then` to `now`; null when there is no date. Never negative. */
 export function daysSince(then: Date | null, now: Date): number | null {
   if (!then) return null;
@@ -47,7 +72,7 @@ type Countable = {
 };
 
 export type Tally = {
-  /** Own repos, forks excluded. */
+  /** Own repos, plus any fork you checked out, returned, or withdrew. */
   repos: number;
   shelf: number;
   onLoan: number;
@@ -72,7 +97,8 @@ export function tally(projects: Countable[], now: Date): Tally {
     dormant: 0,
   };
   for (const p of projects) {
-    if (p.isFork) continue;
+    // Forks only count once you've engaged with one.
+    if (p.isFork && p.status === "IDLE") continue;
     t.repos++;
     const s = standing(p, now);
     if (s === "shelf") t.shelf++;
