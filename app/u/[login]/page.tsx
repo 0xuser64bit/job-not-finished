@@ -88,10 +88,7 @@ export default async function PublicRecord({ params }: Params) {
               />
             )}
             <div className="min-w-0">
-              <p className="typed text-[0.7rem] tracking-[0.2em] text-ink-muted">
-                BORROWER&apos;S RECORD
-              </p>
-              <h1 className="typed mt-1 text-[1.8rem] leading-9 font-bold break-words">
+              <h1 className="typed text-[1.8rem] leading-9 font-bold break-words">
                 @{user.githubLogin}
               </h1>
               <p className="typed mt-1 text-[0.85rem] text-ink-muted">

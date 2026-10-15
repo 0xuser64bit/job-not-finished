@@ -8,8 +8,7 @@ export default function NotFound() {
       <SiteHeader />
       <main className="mx-auto flex max-w-6xl justify-center px-4 pt-10 pb-28 sm:px-6">
         <section className="stock ruled relative w-full max-w-[30rem] px-8 pt-10 pb-12 [--margin:2.5rem] sm:pl-14">
-          <p className="typed text-[0.72rem] tracking-[0.2em] text-ink-muted">CALL NO. 404</p>
-          <h1 className="typed mt-4 text-[1.4rem] leading-8 font-bold">
+          <h1 className="typed max-w-[16rem] text-[1.4rem] leading-8 font-bold">
             This title is not in our catalog.
           </h1>
           <p className="typed mt-3 leading-7">

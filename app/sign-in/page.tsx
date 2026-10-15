@@ -41,12 +41,9 @@ export default async function SignIn({
       <main className="mx-auto flex max-w-6xl justify-center px-4 pt-10 pb-28 sm:px-6">
         <section
           aria-labelledby="apply"
-          className="stock ruled w-full max-w-[34rem] px-6 pt-8 pb-9 [--line:1.75rem] [--margin:2.75rem] sm:pr-10 sm:pl-16"
+          className="stock w-full max-w-[34rem] px-6 pt-8 pb-9 sm:px-10"
         >
-          <p className="typed text-[0.72rem] tracking-[0.2em] text-ink-muted">
-            JOB NOT FINISHED / CIRCULATION DESK
-          </p>
-          <h1 id="apply" className="typed mt-4 text-[1.5rem] leading-8 font-bold tracking-[0.12em]">
+          <h1 id="apply" className="typed text-[1.5rem] leading-8 font-bold tracking-[0.12em]">
             APPLICATION FOR A BORROWER&apos;S CARD
           </h1>
           <p className="typed mt-3 text-[0.92rem] leading-7">

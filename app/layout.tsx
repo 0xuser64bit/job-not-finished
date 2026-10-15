@@ -75,6 +75,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
             <feComposite in="edges" in2="dry" operator="in" />
           </filter>
+          {/* Foil on buckram: the same press, gentler, fewer bare spots. */}
+          <filter id="foil" x="-2%" y="-2%" width="104%" height="104%">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.9"
+              numOctaves="1"
+              seed="7"
+              result="wobble"
+            />
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="wobble"
+              scale="1"
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result="edges"
+            />
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.8"
+              numOctaves="1"
+              seed="2"
+              result="speck"
+            />
+            <feColorMatrix
+              in="speck"
+              type="matrix"
+              values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -4 3.4"
+              result="worn"
+            />
+            <feComposite in="edges" in2="worn" operator="in" />
+          </filter>
         </svg>
         {children}
       </body>

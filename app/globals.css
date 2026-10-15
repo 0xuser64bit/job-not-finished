@@ -18,6 +18,7 @@
   --color-manila: #ecd7a4;
   --color-manila-deep: #dcc185;
   --color-notice: #f6cdd2;
+  --color-kraft: #c9a86c;
   --color-rule: #a7bfdc;
   --color-margin: #de8a85;
 
@@ -92,7 +93,11 @@
     --color-manila: #d5c08f;
     --color-manila-deep: #c4ab74;
     --color-notice: #dfb3b9;
+    --color-kraft: #b6955c;
     --color-rule: #93a9c3;
+    /* Darker inks keep small stamped text above 4.5:1 on the dimmed stock. */
+    --color-red: #951a1f;
+    --color-green: #175a39;
   }
 }
 
@@ -206,6 +211,20 @@
     background-attachment: local;
   }
 
+  /* A kraft book pocket with its thumb notch cut from the top edge. */
+  .pocket {
+    background-color: var(--color-kraft);
+    box-shadow:
+      0 -8px 14px -10px rgb(0 0 0 / 0.45),
+      var(--shadow-card);
+    mask: radial-gradient(circle at 50% 0, transparent 1.5rem, #000 calc(1.5rem + 0.5px));
+  }
+
+  /* Foil-stamped lettering, as on a book's binding. */
+  .foil {
+    filter: url(#foil);
+  }
+
   /* Just the blue rules, for a ruled region inside a sheet. */
   .lines {
     --line: 1.5rem;
@@ -315,19 +334,19 @@
     border: 2px solid var(--color-ink);
     border-radius: var(--radius-card);
     box-shadow:
-      0 2px 0 var(--color-ink),
+      0 2px 4px rgb(0 0 0 / 0.3),
       0 12px 24px -14px rgb(0 0 0 / 0.7);
 
     &:hover:not(:disabled) {
       translate: 0 -1px;
       box-shadow:
-        0 3px 0 var(--color-ink),
-        0 16px 28px -14px rgb(0 0 0 / 0.75);
+        0 4px 8px rgb(0 0 0 / 0.3),
+        0 18px 30px -14px rgb(0 0 0 / 0.75);
     }
     &:active:not(:disabled) {
-      translate: 0 2px;
+      translate: 0 1px;
       box-shadow:
-        0 0 0 var(--color-ink),
+        0 1px 2px rgb(0 0 0 / 0.3),
         0 6px 14px -10px rgb(0 0 0 / 0.6);
     }
   }

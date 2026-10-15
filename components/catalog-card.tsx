@@ -346,8 +346,10 @@ function Dates({
         </dd>
       </div>
       {p.renewals > 0 && (s === "on-loan" || s === "overdue") && (
-        <p className="typed col-span-2 text-[0.72rem] tracking-[0.14em] text-violet">
-          RENEWED {p.renewals}×
+        <p className="col-span-2 pt-1">
+          <Stamp ink="violet" bare tilt={-1.5} className="text-[1.1rem]">
+            Renewed {p.renewals}×
+          </Stamp>
         </p>
       )}
     </dl>

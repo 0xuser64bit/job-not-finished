@@ -57,10 +57,7 @@ export function BorrowerRecord({
             />
           )}
           <div className="min-w-0">
-            <p className="typed text-[0.7rem] tracking-[0.2em] text-ink-muted">
-              BORROWER&apos;S CARD
-            </p>
-            <h1 className="typed mt-1 text-[1.6rem] leading-8 font-bold break-words">
+            <h1 className="typed text-[1.6rem] leading-8 font-bold break-words">
               {login ? `@${login}` : name}
             </h1>
             {login && name !== login && <p className="typed text-sm text-ink-muted">{name}</p>}

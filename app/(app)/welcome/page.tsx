@@ -68,16 +68,13 @@ export default async function Welcome() {
         aria-labelledby="record"
         className="stock mx-auto w-full max-w-[46rem] px-6 pt-8 pb-10 sm:px-10"
       >
-        <div className="typed flex flex-wrap justify-between gap-x-4 text-[0.78rem] text-ink-muted">
-          <span>JOB NOT FINISHED / CIRCULATION DESK</span>
-          <span>{stampDate(now)}</span>
-        </div>
         <h1
           id="record"
-          className="typed mt-5 text-[1.35rem] leading-8 font-bold tracking-[0.18em] sm:text-[1.6rem]"
+          className="typed text-[1.35rem] leading-8 font-bold tracking-[0.18em] sm:text-[1.6rem]"
         >
           REPORT ON BORROWER {user.githubLogin ? `@${user.githubLogin.toUpperCase()}` : ""}
         </h1>
+        <p className="typed mt-1 text-[0.82rem] text-ink-muted">As of {stampDate(now)}</p>
         {syncError ? (
           <p role="alert" className="typed mt-6 font-bold text-red">
             {syncError}

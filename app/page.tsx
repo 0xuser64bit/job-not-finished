@@ -72,7 +72,7 @@ function SectionHeading({ children, id }: { children: React.ReactNode; id?: stri
   return (
     <h2
       id={id}
-      className="font-display text-[clamp(2.4rem,5vw,3.6rem)] leading-[0.95] font-extrabold tracking-[0.01em] text-on-cloth uppercase"
+      className="foil font-display text-[clamp(2.4rem,5vw,3.6rem)] leading-[0.95] font-extrabold tracking-[0.01em] text-on-cloth uppercase"
     >
       {children}
     </h2>
@@ -109,7 +109,7 @@ export default function Home() {
           <div className="order-1 lg:order-2">
             <h1
               id="hero"
-              className="font-display text-[clamp(3.4rem,8.5vw,6rem)] leading-[0.88] font-extrabold tracking-[0.005em] text-on-cloth uppercase"
+              className="foil font-display text-[clamp(3.4rem,8.5vw,6rem)] leading-[0.88] font-extrabold tracking-[0.005em] text-on-cloth uppercase"
             >
               Your side projects are overdue.
             </h1>
@@ -182,6 +182,9 @@ export default function Home() {
           </div>
           <div className="mt-12">
             <NoticeSheet now={now} />
+            <p className="typed mx-auto mt-6 max-w-[42rem] text-center text-[0.74rem] tracking-[0.14em] text-on-cloth-muted">
+              SAMPLE NOTICE · WRITTEN BY THE SAME ROAST ENGINE AS THE REAL ONES
+            </p>
           </div>
         </section>
 

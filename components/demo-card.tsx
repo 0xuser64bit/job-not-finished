@@ -26,17 +26,22 @@ export function DemoCard({ initial, now }: { initial: CardProject; now: Date }) 
           setProject({ ...project, ...next });
         }}
       />
-      <button
-        type="button"
-        onClick={() => {
-          setProject(initial);
-          setFresh(false);
-        }}
-        className={`link-cloth inline-flex items-center gap-1.5 justify-self-start text-sm ${changed ? "" : "invisible"}`}
-      >
-        <RotateCcw aria-hidden className="size-3.5" />
-        Reset the sample card
-      </button>
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <p className="typed text-[0.74rem] tracking-[0.14em] text-on-cloth-muted">
+          SAMPLE CARD · TRY THE BUTTONS
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setProject(initial);
+            setFresh(false);
+          }}
+          className={`link-cloth inline-flex items-center gap-1.5 text-sm ${changed ? "" : "invisible"}`}
+        >
+          <RotateCcw aria-hidden className="size-3.5" />
+          Reset
+        </button>
+      </div>
     </div>
   );
 }
