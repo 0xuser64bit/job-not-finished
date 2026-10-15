@@ -30,3 +30,6 @@ next-env.d.ts
 *.pem
 .vercel
 npm-debug.log*
+
+# local tooling
+/.claude/launch.json
