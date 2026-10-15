@@ -1,0 +1,473 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-15T16:01:26+00:00",
+  "title": "Design System: Job Not Finished",
+  "extensions": {
+    "colorMeta": {
+      "cloth": {
+        "role": "primary",
+        "displayName": "Library Buckram",
+        "canonical": "oklch(37.2% 0.058 167.5)",
+        "tonalRamp": [
+          "#001206",
+          "#002d1e",
+          "#1b493a",
+          "#3b6857",
+          "#5e8c79",
+          "#81b19d",
+          "#a7d7c3",
+          "#cafce7"
+        ]
+      },
+      "cloth-deep": {
+        "role": "primary",
+        "displayName": "Deep Buckram",
+        "canonical": "oklch(30.3% 0.047 166.2)",
+        "tonalRamp": [
+          "#001107",
+          "#072b1f",
+          "#25483a",
+          "#436658",
+          "#658a7a",
+          "#89af9e",
+          "#aed5c4",
+          "#d2f9e7"
+        ]
+      },
+      "cloth-raised": {
+        "role": "primary",
+        "displayName": "Raised Buckram",
+        "canonical": "oklch(42.3% 0.062 172.0)",
+        "tonalRamp": [
+          "#001208",
+          "#002d20",
+          "#134a3c",
+          "#35695a",
+          "#588d7c",
+          "#7cb2a0",
+          "#a1d8c6",
+          "#c5fdea"
+        ]
+      },
+      "on-cloth": {
+        "role": "primary",
+        "displayName": "Spine Foil",
+        "canonical": "oklch(91.7% 0.043 89.4)",
+        "tonalRamp": [
+          "#120a00",
+          "#2c2308",
+          "#493f25",
+          "#675d42",
+          "#8a7f63",
+          "#afa486",
+          "#d6caab",
+          "#faeecf"
+        ]
+      },
+      "on-cloth-muted": {
+        "role": "primary",
+        "displayName": "Faded Foil",
+        "canonical": "oklch(79.0% 0.037 156.8)",
+        "tonalRamp": [
+          "#001005",
+          "#14291d",
+          "#2f4638",
+          "#4d6455",
+          "#6f8777",
+          "#92ac9b",
+          "#b8d2c1",
+          "#dbf6e5"
+        ]
+      },
+      "card": {
+        "role": "secondary",
+        "displayName": "Card Stock",
+        "canonical": "oklch(93.6% 0.039 87.6)",
+        "tonalRamp": [
+          "#120a00",
+          "#2c230c",
+          "#483f27",
+          "#675d44",
+          "#8a7f66",
+          "#afa489",
+          "#d5caae",
+          "#faeed1"
+        ]
+      },
+      "manila": {
+        "role": "secondary",
+        "displayName": "Manila",
+        "canonical": "oklch(88.4% 0.070 88.2)",
+        "tonalRamp": [
+          "#170700",
+          "#322100",
+          "#4f3d09",
+          "#6e5b2b",
+          "#927e4e",
+          "#b7a371",
+          "#ddc996",
+          "#ffedb9"
+        ]
+      },
+      "notice": {
+        "role": "secondary",
+        "displayName": "Notice Pink",
+        "canonical": "oklch(88.5% 0.047 9.8)",
+        "tonalRamp": [
+          "#1a0307",
+          "#371a1f",
+          "#55353a",
+          "#755358",
+          "#9a757a",
+          "#c0999e",
+          "#e7bfc4",
+          "#ffe2e7"
+        ]
+      },
+      "kraft": {
+        "role": "secondary",
+        "displayName": "Kraft",
+        "canonical": "oklch(74.8% 0.087 81.7)",
+        "tonalRamp": [
+          "#1c0300",
+          "#381d00",
+          "#563a00",
+          "#765819",
+          "#9a7b3f",
+          "#c09f64",
+          "#e7c589",
+          "#ffe9ab"
+        ]
+      },
+      "violet": {
+        "role": "tertiary",
+        "displayName": "Date Violet",
+        "canonical": "oklch(41.5% 0.175 281.9)",
+        "tonalRamp": [
+          "#12004b",
+          "#230073",
+          "#392497",
+          "#5348bc",
+          "#736de4",
+          "#9593ff",
+          "#babaff",
+          "#dee0ff"
+        ]
+      },
+      "red": {
+        "role": "tertiary",
+        "displayName": "Overdue Red",
+        "canonical": "oklch(49.0% 0.180 25.5)",
+        "tonalRamp": [
+          "#370000",
+          "#5f0000",
+          "#860000",
+          "#ac1921",
+          "#d74744",
+          "#ff6f68",
+          "#ff988e",
+          "#ffc1b6"
+        ]
+      },
+      "green": {
+        "role": "tertiary",
+        "displayName": "Returned Green",
+        "canonical": "oklch(46.7% 0.098 156.7)",
+        "tonalRamp": [
+          "#001500",
+          "#00310e",
+          "#004e29",
+          "#226e46",
+          "#499268",
+          "#6eb78c",
+          "#94deb1",
+          "#b8ffd4"
+        ]
+      },
+      "black": {
+        "role": "tertiary",
+        "displayName": "Withdrawn Black",
+        "canonical": "oklch(24.8% 0.010 88.8)",
+        "tonalRamp": [
+          "#0d0b07",
+          "#26241f",
+          "#42403a",
+          "#605d58",
+          "#82807a",
+          "#a7a49e",
+          "#cdcac4",
+          "#f1eee7"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Typewriter Ribbon",
+        "canonical": "oklch(21.8% 0.010 88.8)",
+        "tonalRamp": [
+          "#0d0b07",
+          "#26241f",
+          "#42403a",
+          "#605d57",
+          "#82807a",
+          "#a7a49e",
+          "#cdcac3",
+          "#f1eee7"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Faded Ribbon",
+        "canonical": "oklch(40.9% 0.026 83.1)",
+        "tonalRamp": [
+          "#100a01",
+          "#2a2315",
+          "#473f30",
+          "#655d4d",
+          "#887f6f",
+          "#ada392",
+          "#d3c9b8",
+          "#f7eddb"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Index Rule",
+        "canonical": "oklch(79.6% 0.049 253.3)",
+        "tonalRamp": [
+          "#000b1f",
+          "#12253b",
+          "#2d4159",
+          "#4a5f79",
+          "#6c829d",
+          "#90a7c3",
+          "#b5cdea",
+          "#d8f1ff"
+        ]
+      },
+      "margin": {
+        "role": "neutral",
+        "displayName": "Margin Rule",
+        "canonical": "oklch(71.9% 0.104 23.6)",
+        "tonalRamp": [
+          "#290000",
+          "#4a0108",
+          "#6c2424",
+          "#8f4341",
+          "#b66662",
+          "#de8a85",
+          "#ffb0aa",
+          "#ffd3cd"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The landing headline only, uppercase, foil-textured."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section and page headings on the cloth, uppercase, foil-textured."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Project names and card headings, typed bold."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Interface prose on the cloth, near 36rem wide."
+      },
+      "typed": {
+        "displayName": "Typed",
+        "purpose": "Anything written on card stock: descriptions, roasts, terms, forms."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase tracked field labels and SAMPLE marks on paper."
+      },
+      "stamp": {
+        "displayName": "Stamp",
+        "purpose": "Every rubber stamp, with tabular figures for dates."
+      }
+    },
+    "shadows": [
+      {
+        "name": "paper",
+        "value": "0 1px 0 rgb(0 0 0 / 0.06), 0 14px 28px -16px rgb(0 0 0 / 0.55)",
+        "purpose": "Every sheet of card stock lying on the cloth."
+      },
+      {
+        "name": "library-card",
+        "value": "0 2px 4px rgb(0 0 0 / 0.3), 0 12px 24px -14px rgb(0 0 0 / 0.7)",
+        "purpose": "The primary button at rest; lifts on hover, presses on click."
+      },
+      {
+        "name": "pocket",
+        "value": "0 -8px 14px -10px rgb(0 0 0 / 0.45), 0 1px 0 rgb(0 0 0 / 0.06), 0 14px 28px -16px rgb(0 0 0 / 0.55)",
+        "purpose": "The kraft pocket shading the slip tucked into it."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Stamps landing and button presses."
+      },
+      {
+        "name": "stamp-in",
+        "value": "360ms ease-out-expo; scale 1.9 to 1, opacity 0 to 0.9",
+        "purpose": "A stamp slamming onto paper. The only decorative motion."
+      },
+      {
+        "name": "jolt",
+        "value": "240ms ease-out; translate 0 3px then -1px",
+        "purpose": "The paper taking the blow of a stamp."
+      },
+      {
+        "name": "riffle",
+        "value": "1.4s ease-in-out infinite",
+        "purpose": "Loading only: cards riffling while a record syncs."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Library card button",
+      "kind": "button",
+      "refersTo": "button-card",
+      "description": "The one primary action per view, e.g. Check your record.",
+      "html": "<button class=\"ds-btn-card\">Check your record</button>",
+      "css": ".ds-btn-card { display:inline-flex; align-items:center; gap:.55em; min-height:3.25rem; padding:.95rem 1.5rem .85rem; font-family:'Big Shoulders', 'Avenir Next Condensed', 'Arial Narrow', sans-serif; font-weight:700; font-size:1.15rem; letter-spacing:.08em; text-transform:uppercase; color:var(--color-ink, #1c1a15); background:var(--color-manila, #ecd7a4); background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .15 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"); border:2px solid var(--color-ink, #1c1a15); border-radius:3px; box-shadow:0 2px 4px rgb(0 0 0 / .3), 0 12px 24px -14px rgb(0 0 0 / .7); cursor:pointer; transition:translate 120ms cubic-bezier(.16,1,.3,1), box-shadow 120ms cubic-bezier(.16,1,.3,1); } .ds-btn-card:hover { translate:0 -1px; box-shadow:0 4px 8px rgb(0 0 0 / .3), 0 18px 30px -14px rgb(0 0 0 / .75); } .ds-btn-card:active { translate:0 1px; box-shadow:0 1px 2px rgb(0 0 0 / .3), 0 6px 14px -10px rgb(0 0 0 / .6); } .ds-btn-card:focus-visible { outline:2px dashed var(--color-manila, #ecd7a4); outline-offset:3px; }"
+    },
+    {
+      "name": "Slip button",
+      "kind": "button",
+      "refersTo": "button-slip",
+      "description": "Secondary actions on paper, e.g. Renew.",
+      "html": "<button class=\"ds-btn-slip\">Renew</button>",
+      "css": ".ds-btn-slip { min-height:2.25rem; padding:.5rem .75rem .4rem; font-family:'Big Shoulders', 'Avenir Next Condensed', 'Arial Narrow', sans-serif; font-weight:700; font-size:.92rem; letter-spacing:.08em; text-transform:uppercase; color:var(--color-ink, #1c1a15); background:transparent; border:1.5px solid currentColor; border-radius:2px; cursor:pointer; } .ds-btn-slip:hover { background:color-mix(in oklab, currentColor 9%, transparent); } .ds-btn-slip:active { translate:0 1px; } .ds-btn-slip:focus-visible { outline:2px dashed var(--color-violet, #4333a6); outline-offset:2px; }"
+    },
+    {
+      "name": "Slip button, solid",
+      "kind": "button",
+      "refersTo": "button-slip-solid",
+      "description": "The primary action on a card, e.g. Return it.",
+      "html": "<button class=\"ds-btn-solid\">Return it</button>",
+      "css": ".ds-btn-solid { min-height:2.25rem; padding:.5rem .75rem .4rem; font-family:'Big Shoulders', 'Avenir Next Condensed', 'Arial Narrow', sans-serif; font-weight:700; font-size:.92rem; letter-spacing:.08em; text-transform:uppercase; color:var(--color-card, #f5e9cd); background:var(--color-ink, #1c1a15); border:1.5px solid var(--color-ink, #1c1a15); border-radius:2px; cursor:pointer; } .ds-btn-solid:hover { background:color-mix(in oklab, var(--color-ink, #1c1a15) 85%, var(--color-violet, #4333a6)); } .ds-btn-solid:active { translate:0 1px; } .ds-btn-solid:focus-visible { outline:2px dashed var(--color-violet, #4333a6); outline-offset:2px; }"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Typed text input on paper.",
+      "html": "<input class=\"ds-field\" placeholder=\"you@example.com\" />",
+      "css": ".ds-field { min-height:2.5rem; padding:.5rem .7rem; font-family:'Courier Prime', 'Courier New', monospace; font-size:1rem; color:var(--color-ink, #1c1a15); background:color-mix(in oklab, var(--color-card, #f5e9cd) 60%, white); border:1.5px solid var(--color-ink-muted, #51493a); border-radius:2px; caret-color:var(--color-violet, #4333a6); } .ds-field::placeholder { color:var(--color-ink-muted, #51493a); opacity:.8; } .ds-field:focus-visible { outline:2px dashed var(--color-violet, #4333a6); outline-offset:2px; border-color:var(--color-ink, #1c1a15); }"
+    },
+    {
+      "name": "Folder tabs",
+      "kind": "nav",
+      "refersTo": "drawer-tab-active",
+      "description": "The catalog drawers. The active tab is card stock joined to the rule below.",
+      "html": "<nav class=\"ds-tabs\"><a class=\"ds-tab\" aria-current=\"page\">On loan <span>3</span></a><a class=\"ds-tab\">Shelf <span>6</span></a><a class=\"ds-tab\">Returned <span>2</span></a></nav>",
+      "css": ".ds-tabs { display:flex; gap:.25rem; padding:1rem 1rem 0; background:var(--color-cloth, #1c4a3a); border-bottom:2px solid var(--color-card, #f5e9cd); } .ds-tab { display:inline-flex; gap:.5rem; align-items:baseline; padding:.7rem 1rem .55rem; font-family:'Big Shoulders', 'Avenir Next Condensed', 'Arial Narrow', sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:.08em; text-transform:uppercase; color:var(--color-on-cloth-muted, #a8c2b1); border-radius:3px 3px 0 0; cursor:pointer; } .ds-tab span { font-family:'Courier Prime', 'Courier New', monospace; font-size:.85rem; font-weight:400; letter-spacing:0; } .ds-tab:hover { color:var(--color-on-cloth, #efe3c4); } .ds-tab[aria-current=page] { color:var(--color-ink, #1c1a15); background:var(--color-card, #f5e9cd); }"
+    },
+    {
+      "name": "Stamp",
+      "kind": "custom",
+      "description": "State, in one of four inks. Rotated, multiplied into the paper.",
+      "html": "<div class=\"ds-paper\"><span class=\"ds-stamp ds-red\">Overdue</span> <span class=\"ds-stamp ds-violet\">On loan</span> <span class=\"ds-stamp ds-green\">Returned</span> <span class=\"ds-stamp ds-black\">Withdrawn</span></div>",
+      "css": ".ds-paper { display:flex; flex-wrap:wrap; gap:1rem; padding:1.5rem; background:var(--color-card, #f5e9cd); border-radius:3px; } .ds-stamp { display:inline-block; font-family:'Big Shoulders', 'Avenir Next Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:1.4rem; letter-spacing:.07em; text-transform:uppercase; line-height:1; border:.13em solid currentColor; border-radius:.16em; padding:.2em .42em .13em; rotate:-5deg; opacity:.9; mix-blend-mode:multiply; font-variant-numeric:tabular-nums; } .ds-red { color:var(--color-red, #b01e24); rotate:-9deg; } .ds-violet { color:var(--color-violet, #4333a6); } .ds-green { color:var(--color-green, #1d6a43); rotate:-4deg; } .ds-black { color:var(--color-black, #23211c); rotate:3deg; }"
+    },
+    {
+      "name": "Catalog card",
+      "kind": "card",
+      "refersTo": "catalog-card",
+      "description": "A ruled index card per project, with call number, stamped dates, and a roast note.",
+      "html": "<article class=\"ds-card\"><p class=\"ds-call\">005.<br>133<br>TOD</p><div><span class=\"ds-stamp-sm\">Overdue</span><h3>todo-app-v3</h3><p class=\"ds-desc\">The last todo app I will ever write.</p><p class=\"ds-dates\"><span>LAST PUSH</span> <b class=\"ds-date\">MAR 15 2026</b></p><p class=\"ds-note\"><b>NOTE</b> Overdue by 31 days. You set this deadline yourself, by the way.</p></div></article>",
+      "css": ".ds-card { position:relative; display:grid; grid-template-columns:3.4rem 1fr; max-width:22rem; padding:.75rem .75rem 2.75rem 0; font-family:'Courier Prime', 'Courier New', monospace; color:var(--color-ink, #1c1a15); background-color:var(--color-card, #f5e9cd); background-image:linear-gradient(90deg, transparent calc(3.4rem - 1px), var(--color-margin, #de8a85) calc(3.4rem - 1px) 3.4rem, transparent 3.4rem), repeating-linear-gradient(180deg, transparent 0 calc(1.5rem - 1px), color-mix(in oklab, var(--color-rule, #a7bfdc) 75%, transparent) calc(1.5rem - 1px) 1.5rem); border-radius:3px; box-shadow:0 1px 0 rgb(0 0 0 / .06), 0 14px 28px -16px rgb(0 0 0 / .55); mask:radial-gradient(circle at 50% calc(100% - .9rem), transparent .42rem, #000 .48rem); } .ds-card > div { padding-left:.6rem; } .ds-call { margin:0; padding-left:.6rem; font-size:.68rem; line-height:1rem; color:var(--color-ink-muted, #51493a); } .ds-card h3 { margin:0; font-size:1.05rem; line-height:1.5rem; } .ds-desc { margin:0; font-size:.84rem; line-height:1.5rem; color:var(--color-ink-muted, #51493a); } .ds-dates { margin:.5rem 0 0; font-size:.66rem; letter-spacing:.18em; color:var(--color-ink-muted, #51493a); } .ds-date { font-family:'Big Shoulders', 'Avenir Next Condensed', 'Arial Narrow', sans-serif; font-size:1.15rem; letter-spacing:.07em; color:var(--color-red, #b01e24); mix-blend-mode:multiply; } .ds-note { margin:.5rem 0 0; font-size:.88rem; line-height:1.5rem; font-style:italic; } .ds-note b { font-style:normal; color:var(--color-red, #b01e24); } .ds-stamp-sm { float:right; margin-left:.5rem; font-family:'Big Shoulders', 'Avenir Next Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:1rem; letter-spacing:.07em; text-transform:uppercase; color:var(--color-red, #b01e24); border:.13em solid currentColor; border-radius:.16em; padding:.2em .42em .13em; rotate:-9deg; opacity:.9; mix-blend-mode:multiply; }"
+    },
+    {
+      "name": "Notice sheet",
+      "kind": "custom",
+      "refersTo": "notice-sheet",
+      "description": "Overdue notices on pink continuous-form paper, on the page and in email.",
+      "html": "<figure class=\"ds-notice\"><p class=\"ds-notice-title\">OVERDUE NOTICE</p><p>Borrower: you</p><p><b>portfolio-2025</b><br><i>Past due by 12 days. Late fees are payable in shame.</i></p></figure>",
+      "css": ".ds-notice { position:relative; max-width:30rem; margin:0; padding:1.5rem 2.5rem; font-family:'Courier Prime', 'Courier New', monospace; font-size:.86rem; line-height:1.5rem; color:var(--color-ink, #1c1a15); background:var(--color-notice, #f6cdd2); border-radius:3px; box-shadow:0 1px 0 rgb(0 0 0 / .06), 0 14px 28px -16px rgb(0 0 0 / .55); } .ds-notice::before, .ds-notice::after { content:''; position:absolute; top:0; bottom:0; width:1.6rem; background-image:radial-gradient(circle, var(--color-cloth-deep, #133629) .27rem, transparent .33rem); background-size:1.6rem 1.27rem; } .ds-notice::before { left:0; border-right:1px dashed rgb(0 0 0 / .28); } .ds-notice::after { right:0; border-left:1px dashed rgb(0 0 0 / .28); } .ds-notice-title { text-align:center; font-size:1.4rem; font-weight:700; letter-spacing:.28em; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Date-Due Card",
+    "overview": "Every side project is a library book you checked out and never returned, and the app is the circulation desk that keeps your record. The page itself is the inside cover of a library-bound book: a field of deep green buckram cloth. Everything you read sits on a sheet of paper laid on that cloth: manila date-due slips, ruled catalog cards, pink overdue notices, a kraft book pocket. Every change of state is a rubber stamp: violet for dates and loans, red for overdue, green for returned, black for withdrawn.\n\nThe voice is tough love delivered by a librarian. Type is either stamped (condensed caps), typed (a typewriter face on cards), or set (a civic sans for interface prose on the cloth). Density is calm on the cloth and close on the cards, the way a desk looks: a few objects with a lot of detail on each. The system refuses the developer-tool default of dark gradients, glowing accents, and bento grids, and it never uses the retired Kobe Bryant photograph.",
+    "keyCharacteristics": [
+      "Deep green buckram is the ground on every surface; it is never white or cream.",
+      "Readable content lives on card stock with a soft paper shadow.",
+      "State is shown by stamps in four inks, each ink meaning one thing.",
+      "Typewriter text for anything written on a card, with tabular figures for dates and counts.",
+      "Stamps are the only thing that moves, apart from loading indicators."
+    ],
+    "rules": [
+      {
+        "name": "The One Stock Per Surface Rule",
+        "body": "Colour is the sheet, not the mark. The cloth is the ground, card stock holds content, pink stock is reserved for notices, kraft for the pocket. Never introduce a new paper color to decorate.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Means State Rule",
+        "body": "Each stamp ink means exactly one thing: violet for dates and loans, red for overdue and errors, green for returned and confirmed, black for withdrawn. A stamp ink is never decoration.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Stays On Paper Rule",
+        "body": "Stamps multiply into card stock. They never sit on the cloth; anything on the cloth is foil-colored type.",
+        "section": "colors"
+      },
+      {
+        "name": "The Typed On The Card Rule",
+        "body": "Anything written on card stock (names, dates, notes, data) is Courier Prime. Public Sans is for prose on the cloth. Big Shoulders is only for stamps and headings.",
+        "section": "typography"
+      },
+      {
+        "name": "The Real Dates Rule",
+        "body": "Stamped dates use tabular figures and come from real data: push dates, due dates, return dates. Illustrative dates are labeled SAMPLE.",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper Depth Rule",
+        "body": "One soft, offset, blurred shadow per sheet. No zero-blur block shadows, no colored halos, no glass.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do put every readable block on card stock (#f5e9cd) with the Paper shadow; the cloth carries only headings, lead text, and links.",
+      "Do show state with a stamp in its own ink, and only that ink.",
+      "Do set dates and counts in tabular figures, and mark illustrative content SAMPLE.",
+      "Do keep stamps rotated a few degrees and roughened by the shared ink filter.",
+      "Do keep small text on paper at 4.5:1 or better in both themes; the dark-mode inks exist for this."
+    ],
+    "donts": [
+      "Don't stack small tracked labels (eyebrows or kickers) above headings; let the heading speak.",
+      "Don't use zero-blur offset shadows, glows, glass, or gradient text.",
+      "Don't put stamp inks on the cloth, or invent a new paper color.",
+      "Don't animate entrances, scroll reveals, or hovers beyond a 1px press; only stamps land, and loading states may riffle or spin.",
+      "Don't use the retired Kobe Bryant photograph or anyone's likeness."
+    ]
+  }
+}

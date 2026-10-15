@@ -16,7 +16,6 @@
   /* Card stock */
   --color-card: #f5e9cd;
   --color-manila: #ecd7a4;
-  --color-manila-deep: #dcc185;
   --color-notice: #f6cdd2;
   --color-kraft: #c9a86c;
   --color-rule: #a7bfdc;
@@ -34,7 +33,6 @@
 
   --radius-card: 3px;
   --shadow-card: 0 1px 0 rgb(0 0 0 / 0.06), 0 14px 28px -16px rgb(0 0 0 / 0.55);
-  --shadow-lift: 0 1px 0 rgb(0 0 0 / 0.06), 0 22px 36px -18px rgb(0 0 0 / 0.6);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -91,7 +89,6 @@
     --color-cloth-raised: #183a2c;
     --color-card: #ddcfae;
     --color-manila: #d5c08f;
-    --color-manila-deep: #c4ab74;
     --color-notice: #dfb3b9;
     --color-kraft: #b6955c;
     --color-rule: #93a9c3;
